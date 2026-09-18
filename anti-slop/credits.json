@@ -1,0 +1,74 @@
+{
+ "masalah": {
+  "title": "Rubbish",
+  "creator": "oatsy40",
+  "license": "by",
+  "source": "https://www.flickr.com/photos/68089229@N06/7631270960",
+  "w": 1024,
+  "h": 771
+ },
+ "roadmap": {
+  "title": "Color-coded recycling bins",
+  "creator": "Eric Fischer",
+  "license": "by",
+  "source": "https://www.flickr.com/photos/24431382@N03/17820971264",
+  "w": null,
+  "h": null
+ },
+ "esp32": {
+  "title": "File:ESP32 Dev Board.jpg",
+  "creator": "Edwiyanto",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:ESP32_Dev_Board.jpg",
+  "w": 3000,
+  "h": 4000
+ },
+ "sensor-ir": {
+  "title": "2 infrared sensors, arduino nano, breadboard",
+  "creator": "WILLPOWER STUDIOS",
+  "license": "by",
+  "source": "https://www.flickr.com/photos/99717632@N00/38351311196",
+  "w": 1024,
+  "h": 683
+ },
+ "sensor-kelembaban": {
+  "title": "Soil Moisture Sensor Detection Module with Relay",
+  "creator": "tvluke_",
+  "license": "cc0",
+  "source": "https://www.flickr.com/photos/169136682@N02/46692984385",
+  "w": 1024,
+  "h": 575
+ },
+ "hc-sr04": {
+  "title": "File:HC SR04 Ultrasonic sensor 1480322 3 4 HDR Enhancer.jpg",
+  "creator": "Nevit Dilmen (talk)",
+  "license": "CC BY-SA 3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:HC_SR04_Ultrasonic_sensor_1480322_3_4_HDR_Enhancer.jpg",
+  "w": 4300,
+  "h": 3208
+ },
+ "servo-sg90": {
+  "title": "File:Tower Pro SG90 micro servo motor.jpg",
+  "creator": "Suyash Dwivedi",
+  "license": "CC BY-SA 4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Tower_Pro_SG90_micro_servo_motor.jpg",
+  "w": 2905,
+  "h": 1937
+ },
+ "lcd-16x2": {
+  "title": "File:MELT 16x2 LCD alphanumeric display 04(DXO).jpg",
+  "creator": "Retired electrician",
+  "license": "CC0",
+  "source": "https://commons.wikimedia.org/wiki/File:MELT_16x2_LCD_alphanumeric_display_04(DXO).jpg",
+  "w": 3569,
+  "h": 2021
+ },
+ "led": {
+  "title": "File:LEDs.jpg",
+  "creator": "Afrank99",
+  "license": "CC BY-SA 2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:LEDs.jpg",
+  "w": 2336,
+  "h": 3520
+ }
+}

@@ -1,0 +1,206 @@
+/* =====================================================================
+   Smart Bin — Design tokens & base styles (dipakai landing + dashboard)
+   Palet: hijau (eco / primer) · biru (IoT / aksen) · abu netral
+   ===================================================================== */
+:root {
+  /* Hijau — identitas eco-friendly */
+  --green-900: #14532d;
+  --green-800: #166534;
+  --green-700: #15803d;
+  --green-600: #16a34a;
+  --green-500: #22c55e;
+  --green-200: #bbf7d0;
+  --green-100: #dcfce7;
+  --green-50:  #f0fdf4;
+
+  /* Biru — aksen teknologi / IoT */
+  --blue-700: #1d4ed8;
+  --blue-600: #2563eb;
+  --blue-500: #3b82f6;
+  --blue-100: #dbeafe;
+  --blue-50:  #eff6ff;
+
+  /* Status: kuning (hampir penuh) & merah (penuh) — sama dengan LED di alat */
+  --amber-700: #b45309;
+  --amber-600: #d97706;
+  --amber-500: #f59e0b;
+  --amber-100: #fef3c7;
+  --amber-50:  #fffbeb;
+  --red-700: #b91c1c;
+  --red-600: #dc2626;
+  --red-500: #ef4444;
+  --red-100: #fee2e2;
+  --red-50:  #fef2f2;
+
+  /* Netral */
+  --gray-900: #111827;
+  --gray-800: #1f2937;
+  --gray-700: #374151;
+  --gray-600: #4b5563;
+  --gray-500: #6b7280;
+  --gray-400: #9ca3af;
+  --gray-300: #d1d5db;
+  --gray-200: #e5e7eb;
+  --gray-100: #f3f4f6;
+  --gray-50:  #f9fafb;
+  --white:    #ffffff;
+
+  /* Semantik */
+  --primary:       var(--green-600);
+  --primary-dark:  var(--green-700);
+  --primary-soft:  var(--green-50);
+  --accent:        var(--blue-600);
+  --accent-soft:   var(--blue-50);
+  --text:          var(--gray-900);
+  --text-muted:    var(--gray-500);
+  --border:        var(--gray-200);
+  --bg:            var(--white);
+  --bg-alt:        var(--gray-50);
+
+  --radius-sm: 8px;
+  --radius:    12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, .05);
+  --shadow:    0 4px 14px -4px rgba(17, 24, 39, .08);
+  --shadow-lg: 0 24px 48px -16px rgba(17, 24, 39, .18);
+
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* ---------- Reset ringan ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+h1, h2, h3, h4 { margin: 0; line-height: 1.2; font-weight: 700; letter-spacing: -.01em; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+ul { margin: 0; padding: 0; list-style: none; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; padding: 0; }
+input { font: inherit; }
+small { font-size: .8em; }
+
+/* ---------- Ikon (diisi oleh js/icons.js) ---------- */
+[data-icon] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25em;
+  height: 1.25em;
+  flex-shrink: 0;
+  line-height: 0;
+}
+[data-icon] svg { width: 100%; height: 100%; }
+
+.icon-box {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+.icon-box [data-icon] { width: 22px; height: 22px; }
+.icon-box.sm { width: 36px; height: 36px; border-radius: 10px; }
+.icon-box.sm [data-icon] { width: 18px; height: 18px; }
+.icon-box.lg { width: 56px; height: 56px; border-radius: 16px; }
+.icon-box.lg [data-icon] { width: 26px; height: 26px; }
+.icon-box.green { background: var(--green-100); color: var(--green-700); }
+.icon-box.blue  { background: var(--blue-100);  color: var(--blue-700); }
+.icon-box.amber { background: var(--amber-100); color: var(--amber-700); } /* 4.5:1 */
+.icon-box.red   { background: var(--red-100);   color: var(--red-700); }   /* 5.3:1 */
+.icon-box.gray  { background: var(--gray-100);  color: var(--gray-600); }
+
+/* ---------- Tombol ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .8rem 1.35rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: .95rem;
+  border: 1.5px solid transparent;
+  white-space: nowrap;
+  transition: background .2s, color .2s, border-color .2s, transform .15s, box-shadow .2s;
+}
+.btn:active { transform: translateY(1px); }
+.btn-sm { padding: .55rem 1rem; font-size: .875rem; }
+.btn-primary {
+  background: var(--primary-dark); /* putih di atas green-700 = 5.0:1; green-600 hanya 3.3:1 */
+  color: #fff;
+  box-shadow: 0 8px 20px -8px rgba(22, 163, 74, .6);
+}
+.btn-primary:hover { background: var(--green-800); }
+.btn-outline {
+  border-color: var(--gray-300);
+  color: var(--gray-800);
+  background: #fff;
+}
+.btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+  background: var(--primary-soft);
+}
+.btn-white { background: #fff; color: var(--primary-dark); }
+.btn-white:hover { background: var(--green-50); }
+
+/* ---------- Pill / badge ---------- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .35rem .8rem;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 600;
+  background: var(--green-100);
+  color: var(--green-700);
+  line-height: 1.3;
+}
+.pill-blue  { background: var(--blue-100);  color: var(--blue-700); }
+.pill-amber { background: var(--amber-100); color: var(--amber-700); }
+.pill-red   { background: var(--red-100);   color: var(--red-700); }
+.pill-gray  { background: var(--gray-100);  color: var(--gray-600); }
+
+/* ---------- LED indikator (dipakai ilustrasi & legenda) ---------- */
+.led {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gray-300);
+}
+.led.on-green { background: var(--green-500); box-shadow: 0 0 8px var(--green-500); }
+.led.on-amber { background: var(--amber-500); box-shadow: 0 0 8px var(--amber-500); }
+.led.on-red   { background: var(--red-500);   box-shadow: 0 0 8px var(--red-500); }
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Fokus keyboard: cincin biru tua 3px di luar elemen (6.7:1 di atas putih) */
+:focus-visible { outline: 3px solid var(--blue-700); outline-offset: 2px; }
+.btn:focus-visible, .pill:focus-visible { outline-offset: 3px; }
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, .45); }
+  70%      { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+}

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Bin: Pemilah Sampah Otomatis Berbasis IoT</title>
+  <meta name="description" content="Smart Bin: tempat sampah pintar berbasis ESP32 yang memilah sampah organik & anorganik secara otomatis dan memantau kapasitas secara real-time.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/landing.css">
+</head>
+<body class="landing">
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#" class="brand" aria-label="Smart Bin, ke atas">
+        <span class="brand-mark"><span data-icon="recycle"></span></span>
+        Smart Bin
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Navigasi utama">
+        <a href="#masalah">Masalah</a>
+        <a href="#cara-kerja">Cara Kerja</a>
+        <a href="#fitur">Fitur</a>
+        <a href="#komponen">Komponen</a>
+        <a href="#desain">Desain 3D</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="dashboard.html" class="nav-link-cta"><span data-icon="smartphone"></span> Lihat Dashboard</a>
+      </nav>
+      <div class="nav-cta">
+        <a href="#cara-kerja" class="btn btn-outline btn-sm nav-secondary">Cara Kerja</a>
+        <a href="dashboard.html" class="btn btn-primary btn-sm">
+          <span data-icon="smartphone"></span> Lihat Dashboard
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Buka menu" aria-expanded="false" aria-controls="navLinks">
+          <span data-icon="menu"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker">Smart Bin · Proyek IoT · D3 Teknik Informatika</p>
+        <h1>Pemilah Sampah Otomatis <span>Berbasis IoT</span></h1>
+        <p class="hero-desc">
+          Tempat sampah pintar yang memilah sampah organik dan anorganik secara otomatis,
+          lalu memantau kapasitas tiap kompartemen secara real-time melalui ESP32 dan dashboard mobile.
+        </p>
+        <div class="hero-actions">
+          <a href="dashboard.html" class="btn btn-primary" data-magnetic>Lihat Dashboard <span data-icon="arrow-right"></span></a>
+          <a href="#cara-kerja" class="btn btn-outline">Cara Kerja</a>
+        </div>
+        <ul class="hero-chips">
+          <li><span data-icon="check-circle"></span> Sortir otomatis</li>
+          <li><span data-icon="check-circle"></span> Monitoring real-time</li>
+          <li><span data-icon="check-circle"></span> Tahap 1 tersimulasi di Wokwi</li>
+        </ul>
+      </div>
+
+      <!-- Model 3D casing di hero (viewer ringan: auto-rotate, tanpa zoom scroll) -->
+      <div class="hero-visual">
+        <div class="model-viewer model-viewer--hero" id="heroViewer" aria-label="Model 3D casing Smart Bin">
+          <div class="mv-canvas"></div>
+          <div class="mv-status" data-state="loading">Memuat model 3D…</div>
+        </div>
+        <div class="float float-1">
+          <span class="icon-box green sm"><span data-icon="wifi"></span></span>
+          <div>ESP32<small>Online · MQTT</small></div>
+          <span class="float-tag">contoh</span>
+        </div>
+        <div class="float float-2">
+          <span class="icon-box blue sm"><span data-icon="leaf"></span></span>
+          <div>Deteksi terakhir<small>Organik · 14:32</small></div>
+          <span class="float-tag">contoh</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROBLEM ================= -->
+  <section id="masalah" class="section">
+    <div class="container">
+      <div class="split reveal">
+        <figure class="photo-card photo-card--blob">
+          <img src="img/masalah.jpg" width="1024" height="771" loading="lazy"
+               alt="Tempat sampah umum di taman yang meluap: botol plastik, kaleng, dan kantong sampah tercampur jadi satu">
+          <figcaption class="photo-credit">Foto: oatsy40, CC BY 2.0</figcaption>
+        </figure>
+        <div class="split-copy">
+          <span class="eyebrow">Latar Belakang</span>
+          <h2>Sampah yang tercampur, masalah yang menumpuk</h2>
+          <p>
+            Di lingkungan kampus dan masyarakat, pemilahan sampah masih bergantung pada kesadaran individu.
+            Hasilnya: sampah organik dan anorganik tercampur, sulit diolah, dan tempat sampah sering penuh
+            tanpa ada yang tahu.
+          </p>
+        </div>
+      </div>
+
+      <div class="problem-grid">
+        <article class="problem-card reveal" style="--d: 0s">
+          <div class="icon-box red"><span data-icon="split"></span></div>
+          <h3>Pemilahan manual tidak konsisten</h3>
+          <p>Banyak orang membuang sampah tanpa memperhatikan label organik/anorganik, sehingga proses daur ulang terhambat sejak dari sumbernya.</p>
+        </article>
+        <article class="problem-card reveal" style="--d: .1s">
+          <div class="icon-box amber"><span data-icon="alert-triangle"></span></div>
+          <h3>Bin penuh tidak terpantau</h3>
+          <p>Petugas kebersihan baru tahu tempat sampah penuh saat sudah meluap. Tidak ada informasi kapasitas secara real-time.</p>
+        </article>
+        <article class="problem-card reveal" style="--d: .2s">
+          <div class="icon-box blue"><span data-icon="bar-chart"></span></div>
+          <h3>Data pengelolaan sampah minim</h3>
+          <p>Tanpa data volume dan jenis sampah, sulit merencanakan jadwal pengangkutan maupun program bank sampah.</p>
+        </article>
+      </div>
+
+      <div class="solution-strip reveal">
+        <div class="solution-text">
+          <strong>Solusi Smart Bin</strong>
+          <p>Sortir otomatis saat sampah masuk, kapasitas terpantau lewat sensor, dan semua data terekam di dashboard.</p>
+        </div>
+        <a href="#cara-kerja" class="btn btn-white">Lihat cara kerjanya</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW IT WORKS ================= -->
+  <section id="cara-kerja" class="section section-alt">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Cara Kerja</span>
+        <h2>Dari buang sampah sampai terpantau di ponsel</h2>
+        <p>Empat langkah yang berjalan otomatis setiap kali ada sampah masuk ke alat.</p>
+      </div>
+
+      <div class="steps">
+        <article class="step reveal" style="--d: 0s">
+          <span class="step-num">1</span>
+          <div class="step-icon"><span data-icon="trash-2"></span></div>
+          <h3>Buang sampah</h3>
+          <p>Pengguna memasukkan sampah lewat lubang masuk di bagian atas alat.</p>
+        </article>
+        <article class="step reveal" style="--d: .1s">
+          <span class="step-num">2</span>
+          <div class="step-icon"><span data-icon="radio"></span></div>
+          <h3>Sensor mendeteksi</h3>
+          <p>Sensor IR mendeteksi ada sampah masuk, lalu sensor kelembaban menentukan jenisnya: lembab = organik, kering = anorganik.</p>
+        </article>
+        <article class="step reveal" style="--d: .2s">
+          <span class="step-num">3</span>
+          <div class="step-icon"><span data-icon="rotate-cw"></span></div>
+          <h3>Platform memilah</h3>
+          <p>Satu servo SG90 memiringkan platform: ke kiri untuk organik, ke kanan untuk anorganik, lalu kembali ke tengah.</p>
+        </article>
+        <article class="step reveal" style="--d: .3s">
+          <span class="step-num">4</span>
+          <div class="step-icon"><span data-icon="smartphone"></span></div>
+          <h3>Data terpantau</h3>
+          <p>Sensor ultrasonik mengukur ketinggian isi; ESP32 mengirim data ke dashboard via WiFi/MQTT.</p>
+        </article>
+      </div>
+
+      <p class="steps-note reveal">
+        <span data-icon="monitor"></span>
+        Status juga tampil lokal di alat melalui <strong>LCD 16x2</strong> dan
+        <strong>LED hijau / kuning / merah</strong>. Setiap sampah berhasil dipilah, LCD menampilkan
+        pesan <em>"Terima kasih sudah tidak buang sampah sembarangan"</em>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= FEATURES ================= -->
+  <section id="fitur" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Fitur Utama</span>
+        <h2>Pintar di alat, jelas di dashboard</h2>
+        <p>Fitur inti yang membedakan Smart Bin dari tempat sampah biasa.</p>
+      </div>
+
+      <div class="features">
+        <article class="feature reveal" style="--d: 0s">
+          <div class="icon-box green"><span data-icon="split"></span></div>
+          <h3>Deteksi & sortir otomatis</h3>
+          <p>Sampah langsung dipilah tanpa campur tangan pengguna. Servo memiringkan platform sesuai jenis sampah yang terdeteksi.</p>
+        </article>
+        <article class="feature reveal" style="--d: .1s">
+          <div class="icon-box blue"><span data-icon="gauge"></span></div>
+          <h3>Monitoring kapasitas real-time</h3>
+          <p>Ketinggian isi tiap kompartemen dibaca sensor ultrasonik dan ditampilkan sebagai persentase kapasitas.</p>
+        </article>
+        <article class="feature reveal" style="--d: .2s">
+          <div class="icon-box amber"><span data-icon="bell-ring"></span></div>
+          <h3>Notifikasi bin penuh</h3>
+          <p>Saat kapasitas melewati ambang batas (mis. 80%), LED merah menyala dan dashboard mengirim peringatan.</p>
+        </article>
+        <article class="feature reveal" style="--d: .3s">
+          <div class="icon-box green"><span data-icon="smartphone"></span></div>
+          <h3>Dashboard mobile</h3>
+          <p>Pantau status, kontrol platform secara manual, dan lihat riwayat serta statistik, semua dari ponsel.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COMPONENTS ================= -->
+  <section id="komponen" class="section section-alt">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Komponen & Teknologi</span>
+        <h2>Dibangun dari komponen yang terjangkau</h2>
+        <p>Seluruh rangkaian berbasis ESP32 dan sudah disimulasikan di Wokwi sebelum dirakit secara fisik.</p>
+      </div>
+
+      <div class="components">
+        <article class="component component--featured reveal" style="--d: 0s">
+          <img class="component-photo" src="img/komponen/esp32-wide.jpg" width="1120" height="701" loading="lazy" alt="Board ESP32 DevKit di atas breadboard">
+          <div>
+            <div class="component-head"><h3>ESP32</h3><span class="qty">1x</span></div>
+            <p>Otak sistem: membaca sensor, mengendalikan servo, dan mengirim data ke dashboard lewat WiFi.</p>
+          </div>
+        </article>
+        <article class="component reveal" style="--d: .05s">
+          <img class="component-photo" loading="lazy" src="img/komponen/sensor-ir.jpg" width="480" height="480" loading="lazy" alt="Modul sensor inframerah terpasang di breadboard">
+          <div>
+            <div class="component-head"><h3>Sensor IR</h3><span class="qty">1x</span></div>
+            <p>Pemicu: mendeteksi ada sampah masuk lewat lubang atas, lalu memulai proses pemilahan.</p>
+          </div>
+        </article>
+        <article class="component reveal" style="--d: .08s">
+          <img class="component-photo" loading="lazy" src="img/komponen/sensor-kelembaban.jpg" width="480" height="480" loading="lazy" alt="Modul sensor kelembaban tanah dengan dua probe">
+          <div>
+            <div class="component-head"><h3>Sensor Kelembaban</h3><span class="qty">1x</span></div>
+            <p>Menentukan jenis sampah: nilai lembab = organik, kering = anorganik.</p>
+          </div>
+        </article>
+        <article class="component reveal" style="--d: .1s">
+          <img class="component-photo" loading="lazy" src="img/komponen/hc-sr04.jpg" width="480" height="480" loading="lazy" alt="Modul sensor ultrasonik HC-SR04">
+          <div>
+            <div class="component-head"><h3>Ultrasonik HC-SR04</h3><span class="qty">2x</span></div>
+            <p>Mengukur jarak ke permukaan sampah di tiap kompartemen untuk menghitung level kapasitas.</p>
+          </div>
+        </article>
+        <article class="component reveal" style="--d: .15s">
+          <img class="component-photo" loading="lazy" src="img/komponen/servo-sg90.jpg" width="480" height="480" loading="lazy" alt="Motor servo Tower Pro SG90 dengan kabel">
+          <div>
+            <div class="component-head"><h3>Servo SG90</h3><span class="qty">1x</span></div>
+            <p>Memiringkan platform ke kiri (organik) atau ke kanan (anorganik).</p>
+          </div>
+        </article>
+        <article class="component reveal" style="--d: .2s">
+          <img class="component-photo" loading="lazy" src="img/komponen/lcd-16x2.jpg" width="480" height="480" loading="lazy" alt="Modul LCD karakter 16x2 dengan latar hijau">
+          <div>
+            <div class="component-head"><h3>LCD 16x2</h3><span class="qty">1x</span></div>
+            <p>Menampilkan status kapasitas, jenis sampah terakhir, dan pesan terima kasih di alat.</p>
+          </div>
+        </article>
+        <article class="component reveal" style="--d: .25s">
+          <img class="component-photo" loading="lazy" src="img/komponen/led.jpg" width="480" height="480" loading="lazy" alt="LED 5 mm warna kuning, merah, dan hijau">
+          <div>
+            <div class="component-head"><h3>LED Indikator</h3><span class="qty">3x</span></div>
+            <p>Hijau = normal, kuning = hampir penuh, merah = penuh. Terlihat dari jauh tanpa buka aplikasi.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="software reveal">
+        <span class="tag"><span data-icon="code"></span> Arduino / C++</span>
+        <span class="tag"><span data-icon="flask"></span> Wokwi Simulator</span>
+        <span class="tag"><span data-icon="wifi"></span> WiFi</span>
+        <span class="tag"><span data-icon="server"></span> MQTT</span>
+        <span class="tag"><span data-icon="smartphone"></span> Dashboard Mobile (HTML/CSS/JS)</span>
+      </div>
+
+      <div class="arch reveal">
+        <div class="arch-node">
+          <div class="icon-box blue sm"><span data-icon="radio"></span></div>
+          <strong>Sensor & Aktuator</strong>
+          <span>IR · Kelembaban · Ultrasonik · Servo · LCD · LED</span>
+        </div>
+        <div class="arch-arrow"><span data-icon="arrow-right"></span></div>
+        <div class="arch-node highlight">
+          <div class="icon-box green sm"><span data-icon="cpu"></span></div>
+          <strong>ESP32</strong>
+          <span>Firmware Arduino, logika sortir & threshold</span>
+        </div>
+        <div class="arch-arrow"><span data-icon="arrow-right"></span></div>
+        <div class="arch-node">
+          <div class="icon-box blue sm"><span data-icon="server"></span></div>
+          <strong>WiFi / MQTT Broker</strong>
+          <span>Publish topik <code>smartbin/01/#</code></span>
+        </div>
+        <div class="arch-arrow"><span data-icon="arrow-right"></span></div>
+        <div class="arch-node">
+          <div class="icon-box green sm"><span data-icon="smartphone"></span></div>
+          <strong>Dashboard Mobile</strong>
+          <span>Monitoring, kontrol & riwayat</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DESAIN 3D (Three.js) ================= -->
+  <section id="desain" class="section">
+    <div class="container">
+      <!-- Komponen penampil 3D: logika ada di js/model-viewer.js. Wrapper = container viewer. -->
+      <div class="overlap model-viewer reveal" id="modelViewer">
+        <div class="overlap-media">
+          <div class="mv-canvas"></div>
+          <div class="mv-status" data-state="loading">Memuat model 3D…</div>
+        </div>
+        <div class="overlap-card">
+          <span class="eyebrow">Desain Produk</span>
+          <h2>Lihat desain produk kami</h2>
+          <p>
+            Model 3D casing Smart Bin: lubang masuk di atas, platform pemilah, dan dua laci
+            kompartemen organik & anorganik. Putar dan perbesar untuk melihat detailnya.
+          </p>
+          <div class="mv-toolbar">
+            <span class="mv-hint"><span data-icon="rotate-cw"></span> Drag untuk memutar · Scroll / cubit untuk zoom</span>
+            <button class="mv-reset" type="button"><span data-icon="refresh"></span> Reset tampilan</button>
+          </div>
+          <ul class="mv-legend">
+            <li><i style="background: #16a34a"></i> Laci organik (kiri)</li>
+            <li><i style="background: #2563eb"></i> Laci anorganik (kanan)</li>
+            <li><i style="background: #374151"></i> Panel LCD & LED (depan)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ROADMAP ================= -->
+  <section id="roadmap" class="section">
+    <div class="container">
+      <div class="spotlight">
+      <div class="section-head reveal">
+        <span class="eyebrow">Roadmap</span>
+        <h2>Empat tahap dalam 16 pertemuan</h2>
+        <p>Dikembangkan bertahap dari pemilah sederhana hingga sistem ekonomi sirkular yang terintegrasi.</p>
+      </div>
+
+      <div class="roadmap">
+        <div class="stage done reveal" style="--d: 0s">
+          <span class="stage-dot"><span data-icon="check-circle"></span></span>
+          <div class="stage-card">
+            <div class="stage-meta">Tahap 1 · Pertemuan 1–4</div>
+            <h3>Smart Dustbin Pemilah</h3>
+            <ul>
+              <li>Sensor IR deteksi sampah masuk</li>
+              <li>Sensor kelembaban tentukan jenis</li>
+              <li>Servo platform tilting kiri / kanan</li>
+              <li>Counter total organik / anorganik</li>
+              <li>LCD 16x2 & LED status</li>
+              <li>Simulasi rangkaian di Wokwi</li>
+            </ul>
+            <span class="pill">Selesai (simulasi)</span>
+          </div>
+        </div>
+        <div class="stage active reveal" style="--d: .1s">
+          <span class="stage-dot"></span>
+          <div class="stage-card">
+            <div class="stage-meta">Tahap 2 · Pertemuan 5–8</div>
+            <h3>Deteksi Kapasitas</h3>
+            <ul>
+              <li>2x sensor ultrasonik per kompartemen</li>
+              <li>Ambang batas "penuh" & notifikasi</li>
+              <li>Kirim data via WiFi / MQTT</li>
+              <li>Dashboard monitoring mobile</li>
+            </ul>
+            <span class="pill pill-blue">Sedang berjalan</span>
+          </div>
+        </div>
+        <div class="stage reveal" style="--d: .2s">
+          <span class="stage-dot"></span>
+          <div class="stage-card">
+            <div class="stage-meta">Tahap 3 · Pertemuan 9–12</div>
+            <h3>Bank Sampah Digital</h3>
+            <ul>
+              <li>Load cell untuk menimbang berat</li>
+              <li>RFID sebagai identitas pengguna</li>
+              <li>Poin & rekap setoran sampah</li>
+            </ul>
+            <span class="pill pill-gray">Direncanakan</span>
+          </div>
+        </div>
+        <div class="stage reveal" style="--d: .3s">
+          <span class="stage-dot"></span>
+          <div class="stage-card">
+            <div class="stage-meta">Tahap 4 · Pertemuan 13–16</div>
+            <h3>Capstone: Smart Circular Economy</h3>
+            <ul>
+              <li>Integrasi seluruh modul</li>
+              <li>Dashboard terpadu multi-alat</li>
+              <li>Laporan akhir & demo</li>
+            </ul>
+            <span class="pill pill-gray">Direncanakan</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="roadmap-visual">
+      <figure class="photo-card photo-card--roadmap reveal">
+        <img src="img/roadmap.jpg" width="1024" height="768" loading="lazy"
+             alt="Tiga kontainer daur ulang berkode warna biru, hijau, dan kuning di tepi jalan kota">
+        <figcaption class="photo-credit">Foto: Eric Fischer, CC BY 2.0</figcaption>
+      </figure>
+      <div class="progress-note reveal">
+        <span class="icon-box green sm"><span data-icon="flask"></span></span>
+        <div>
+          <strong>Status saat ini: Tahap 1 selesai di simulasi Wokwi.</strong>
+          Sensor IR, sensor kelembaban, servo platform, LCD, dan LED sudah berfungsi. Fokus berikutnya: pembacaan kapasitas
+          dan pengiriman data ke dashboard.
+        </div>
+      </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CTA ================= -->
+  <section class="cta-band">
+    <div class="container cta-inner reveal">
+      <h2>Lihat mockup dashboard-nya</h2>
+      <p>Monitoring kapasitas, kontrol manual, riwayat, dan pengaturan, dalam satu aplikasi mobile.</p>
+      <a href="dashboard.html" class="btn btn-primary" data-magnetic>Buka Dashboard</a>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="#" class="brand brand-light">
+            <span class="brand-mark"><span data-icon="recycle"></span></span>
+            Smart Bin
+          </a>
+          <p class="footer-desc">
+            Tempat sampah pintar berbasis ESP32 yang memilah sampah organik & anorganik
+            secara otomatis dan memantau kapasitasnya secara real-time.
+          </p>
+        </div>
+        <div>
+          <h4>Navigasi</h4>
+          <ul class="footer-links">
+            <li><a href="#masalah">Masalah</a></li>
+            <li><a href="#cara-kerja">Cara Kerja</a></li>
+            <li><a href="#fitur">Fitur</a></li>
+            <li><a href="#komponen">Komponen</a></li>
+            <li><a href="#desain">Desain 3D</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Proyek</h4>
+          <ul class="footer-links">
+            <li><span><span data-icon="github"></span> Repositori GitHub <em class="soon">segera tersedia</em></span></li>
+            <li><span><span data-icon="flask"></span> Simulasi Wokwi <em class="soon">segera tersedia</em></span></li>
+            <li><a href="dashboard.html"><span data-icon="smartphone"></span> Mockup Dashboard</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Kontak</h4>
+          <ul class="footer-links">
+            <li><span><span data-icon="mail"></span> Email tim <em class="soon">segera tersedia</em></span></li>
+            <li><span><span data-icon="building"></span> D3 Teknik Informatika</span></li>
+            <li><span><span data-icon="users"></span> Tim Smart Bin</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="footer-credits">
+        Foto: <a href="https://www.flickr.com/photos/68089229@N06/7631270960" target="_blank" rel="noopener">"Rubbish" oleh oatsy40</a> (CC BY 2.0),
+        <a href="https://www.flickr.com/photos/24431382@N03/17820971264" target="_blank" rel="noopener">"Color-coded recycling bins" oleh Eric Fischer</a> (CC BY 2.0).
+        Foto komponen dari Wikimedia Commons dan Flickr (CC0, CC BY, CC BY-SA), daftar lengkap di README.
+      </p>
+      <div class="footer-bottom">
+        <span>© 2026 Tim Smart Bin · Proyek Mata Kuliah IoT</span>
+        <span>Dibuat dengan HTML, CSS & JavaScript</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/icons.js"></script>
+  <script src="js/landing.js"></script>
+
+  <!-- Three.js dari CDN (ES module). Model 3D perlu dibuka lewat http://, bukan file:// -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module">
+    import { initModelViewer } from './js/model-viewer.js';
+    // Section "Desain Produk": viewer lengkap (zoom, reset), tempat Tahap 2 nanti
+    initModelViewer(document.getElementById('modelViewer'), { name: 'main', fit: 1.18, targetY: 0.5 }); // model utuh + bayangan di dalam kartu
+    // Hero: viewer ringan: berputar terus, scroll tetap menggulir halaman
+    initModelViewer(document.getElementById('heroViewer'), {
+      name: 'hero', enableZoom: false, resumeAutoRotate: true, fit: 1.0, elevation: 28, targetY: 0.42, // target rendah → model naik, bayangan dapat ruang di bawah
+      demo: true, // Tahap 2: animasi sampah jatuh & tersortir (hanya di hero)
+      mouseParallax: true, // scene menoleh halus mengikuti kursor
+    });
+  </script>
+</body>
+</html>

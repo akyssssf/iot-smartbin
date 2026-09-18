@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Bin: Mockup Dashboard Mobile</title>
+  <meta name="description" content="Mockup aplikasi mobile Smart Bin: monitoring kapasitas, kontrol manual, riwayat, dan pengaturan alat.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dash-body">
+
+  <div class="stage">
+    <header class="stage-header">
+      <a href="index.html" class="back-link"><span data-icon="arrow-left"></span><span class="back-text">Kembali ke landing page</span></a>
+      <div class="stage-title">
+        <span class="brand-mark"><span data-icon="recycle"></span></span>
+        <div>
+          <strong>Mockup Dashboard Mobile</strong>
+          <span>Smart Bin · 375 × 812</span>
+        </div>
+      </div>
+      <span class="pill pill-blue"><span data-icon="flask"></span> Data simulasi</span>
+    </header>
+
+    <main class="stage-main">
+      <!-- Catatan untuk presentasi (tampil di desktop) -->
+      <aside class="stage-notes">
+        <h2>Coba interaksinya</h2>
+        <ul>
+          <li><span data-icon="chevron-right"></span><span>Tab bawah untuk berpindah 4 halaman.</span></li>
+          <li><span data-icon="chevron-right"></span><span><strong>Beranda</strong> → tekan "Simulasi deteksi": kartu deteksi, counter total, dan riwayat ikut berubah, lalu muncul pesan terima kasih.</span></li>
+          <li><span data-icon="chevron-right"></span><span><strong>Kontrol</strong> → aktifkan Manual Override, lalu tekan tombol miringkan platform.</span></li>
+          <li><span data-icon="chevron-right"></span><span>Geser slider ambang batas: status & banner di Beranda ikut berubah.</span></li>
+          <li><span data-icon="chevron-right"></span><span><strong>Pengaturan</strong> → matikan "Peringatan bin penuh" untuk menyembunyikan banner.</span></li>
+          <li><span data-icon="chevron-right"></span><span>Reset riwayat (ada konfirmasi), lalu muat ulang data demo.</span></li>
+        </ul>
+
+        <h2>Skenario data</h2>
+        <p>Organik <strong>45%</strong> (normal) · Anorganik <strong>85%</strong> (melewati ambang 80% → LED merah + notifikasi).</p>
+
+        <h2>Warna status</h2>
+        <ul class="swatches">
+          <li><i style="background: var(--green-500)"></i> Hijau: normal / organik / primer</li>
+          <li><i style="background: var(--blue-500)"></i> Biru: anorganik / aksen IoT</li>
+          <li><i style="background: var(--amber-500)"></i> Kuning: hampir penuh</li>
+          <li><i style="background: var(--red-500)"></i> Merah: penuh / peringatan</li>
+        </ul>
+        <p class="tiny">Sama dengan LED hijau / kuning / merah di alat, supaya pengguna tidak perlu belajar dua sistem warna.</p>
+      </aside>
+
+      <!-- ================= FRAME PONSEL ================= -->
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="statusbar">
+          <span id="clock">09:41</span>
+          <div class="statusbar-right">
+            <span data-icon="signal"></span>
+            <span data-icon="wifi"></span>
+            <span data-icon="battery"></span>
+          </div>
+        </div>
+
+        <div class="app">
+          <div class="app-content" id="appContent">
+
+            <!-- ===== HALAMAN 1: BERANDA / MONITORING ===== -->
+            <section class="page active" data-page="home">
+              <header class="page-header">
+                <div>
+                  <div class="sub">Smart Bin #01 · Lab IoT</div>
+                  <h1>Beranda</h1>
+                </div>
+                <div class="header-right">
+                  <span class="status-chip js-status" id="deviceStatus"><span class="dot"></span> Online</span>
+                  <button class="icon-btn" id="bellBtn" aria-label="Lihat notifikasi">
+                    <span data-icon="bell"></span><span class="badge-dot"></span>
+                  </button>
+                </div>
+              </header>
+
+              <div id="alertBanner"></div>
+
+              <div class="gauge-grid">
+                <div class="card gauge-card" data-comp="organik">
+                  <div class="gauge">
+                    <svg viewBox="0 0 100 100">
+                      <circle class="track" cx="50" cy="50" r="42" fill="none" stroke-width="9"/>
+                      <circle class="bar" cx="50" cy="50" r="42" fill="none" stroke-width="9"
+                              stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+                    </svg>
+                    <div class="val"><span class="num">0</span><small>%</small></div>
+                  </div>
+                  <h3><span data-icon="leaf" class="ico-green"></span> Organik</h3>
+                  <div class="meta">Jarak sensor <span class="dist">…</span></div>
+                  <span class="lvl"></span>
+                </div>
+                <div class="card gauge-card" data-comp="anorganik">
+                  <div class="gauge">
+                    <svg viewBox="0 0 100 100">
+                      <circle class="track" cx="50" cy="50" r="42" fill="none" stroke-width="9"/>
+                      <circle class="bar" cx="50" cy="50" r="42" fill="none" stroke-width="9"
+                              stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+                    </svg>
+                    <div class="val"><span class="num">0</span><small>%</small></div>
+                  </div>
+                  <h3><span data-icon="package" class="ico-blue"></span> Anorganik</h3>
+                  <div class="meta">Jarak sensor <span class="dist">…</span></div>
+                  <span class="lvl"></span>
+                </div>
+              </div>
+
+              <div class="totals" id="totals">
+                <span class="total-badge org"><span data-icon="leaf"></span> Total Organik: <strong id="totalOrg">0</strong></span>
+                <span class="total-badge anorg"><span data-icon="package"></span> Total Anorganik: <strong id="totalAnorg">0</strong></span>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Deteksi terakhir
+                  <button class="pill-mini pill-action" id="simulateBtn" title="Simulasikan sampah masuk (demo)"><span data-icon="refresh"></span> Simulasi deteksi</button>
+                </div>
+                <div class="row" id="lastDetect">
+                  <div class="icon-box green"><span data-icon="leaf"></span></div>
+                  <div class="t">
+                    <strong>Sampah organik</strong>
+                    <span>Kelembaban 68% (lembab) · platform miring ke kiri · tersortir</span>
+                  </div>
+                  <time>14:32</time>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Status alat</div>
+                <div class="kv">
+                  <div><span>Mode</span><strong id="modeLabel">Otomatis</strong></div>
+                  <div><span>WiFi</span><strong>LabIoT_2.4G</strong></div>
+                  <div><span>Sinkron terakhir</span><strong id="syncLabel">3 dtk lalu</strong></div>
+                  <div><span>Sinyal · Uptime</span><strong>−58 dBm · 5 j 17 m</strong></div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Hari ini <span class="pill-mini" id="todayTotal">24 item</span></div>
+                <div class="stack-bar" id="todayBar">
+                  <span class="org" style="width: 62.5%"></span>
+                  <span class="anorg" style="width: 37.5%"></span>
+                </div>
+                <div class="legend">
+                  <span><i class="org"></i> Organik <strong id="todayOrg">15</strong></span>
+                  <span><i class="anorg"></i> Anorganik <strong id="todayAnorg">9</strong></span>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===== HALAMAN 2: KONTROL MANUAL ===== -->
+            <section class="page" data-page="control">
+              <header class="page-header">
+                <div>
+                  <div class="sub">Kendali alat</div>
+                  <h1>Kontrol</h1>
+                </div>
+                <span class="status-chip js-status"><span class="dot"></span> Online</span>
+              </header>
+
+              <div class="card">
+                <div class="card-title">Mode operasi</div>
+                <div class="segmented" id="modeSeg">
+                  <button class="active" data-mode="auto"><span data-icon="zap"></span> Otomatis</button>
+                  <button data-mode="manual"><span data-icon="hand"></span> Manual Override</button>
+                </div>
+                <p class="note" id="modeNote">
+                  <span data-icon="info"></span>
+                  <span>Sistem mendeteksi sampah masuk melalui sensor inframerah, lalu menentukan jenisnya berdasarkan tingkat kelembaban.</span>
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Uji servo platform <span class="pill-mini">Servo SG90</span></div>
+                <div class="tilt-grid">
+                  <button class="tilt-btn" data-target="organik" disabled>
+                    <span class="icon-box green"><span data-icon="leaf"></span></span>
+                    <span class="lbl">Miringkan ke Organik</span>
+                    <small>Posisi: Kiri</small>
+                  </button>
+                  <button class="tilt-btn" data-target="anorganik" disabled>
+                    <span class="icon-box blue"><span data-icon="package"></span></span>
+                    <span class="lbl">Miringkan ke Anorganik</span>
+                    <small>Posisi: Kanan</small>
+                  </button>
+                </div>
+                <div class="tilt-indicator" id="tiltIndicator" aria-hidden="true">
+                  <span class="side">Organik</span>
+                  <span class="platform"><i></i></span>
+                  <span class="side">Anorganik</span>
+                </div>
+                <p class="hint" id="tiltHint">Aktifkan Manual Override untuk mengendalikan platform.</p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Ambang batas "penuh"</div>
+                <div class="range-row">
+                  <span class="range-label">Level kapasitas</span>
+                  <span class="range-val"><span id="thVal">80</span>%</span>
+                </div>
+                <input type="range" id="thRange" min="60" max="95" step="5" value="80" aria-label="Ambang batas penuh">
+                <div class="range-scale"><span>60%</span><span>95%</span></div>
+                <p class="hint" id="thHint">LED merah & notifikasi aktif saat level ≥ 80%.</p>
+                <div class="led-legend">
+                  <div><span class="led on-green"></span>Normal<br><b id="lgGreen">&lt; 60%</b></div>
+                  <div><span class="led on-amber"></span>Hampir penuh<br><b id="lgAmber">60–79%</b></div>
+                  <div><span class="led on-red"></span>Penuh<br><b id="lgRed">≥ 80%</b></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ===== HALAMAN 3: RIWAYAT / STATISTIK ===== -->
+            <section class="page" data-page="history">
+              <header class="page-header">
+                <div>
+                  <div class="sub">7 hari terakhir</div>
+                  <h1>Riwayat</h1>
+                </div>
+                <button class="icon-btn" aria-label="Pilih rentang tanggal"><span data-icon="calendar"></span></button>
+              </header>
+
+              <div class="stat-row">
+                <div class="stat"><div class="n" id="statTotal">0</div><div class="l">Total item</div></div>
+                <div class="stat"><div class="n green" id="statOrg">0</div><div class="l">Organik</div></div>
+                <div class="stat"><div class="n blue" id="statAnorg">0</div><div class="l">Anorganik</div></div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Sampah masuk per hari</div>
+                <div class="chart" id="chart"></div>
+                <div class="legend">
+                  <span><i class="org"></i> Organik</span>
+                  <span><i class="anorg"></i> Anorganik</span>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Aktivitas terbaru <span class="pill-mini">Hari ini</span></div>
+                <ul class="activity" id="activityList"></ul>
+              </div>
+            </section>
+
+            <!-- ===== HALAMAN 4: PENGATURAN ===== -->
+            <section class="page" data-page="settings">
+              <header class="page-header">
+                <div>
+                  <div class="sub">Konfigurasi</div>
+                  <h1>Pengaturan</h1>
+                </div>
+              </header>
+
+              <div class="card device-card">
+                <div class="icon-box green lg"><span data-icon="cpu"></span></div>
+                <div class="t">
+                  <strong>Smart Bin #01</strong>
+                  <span>ESP32 · Firmware v0.3.0 (simulasi Wokwi)</span>
+                </div>
+                <span class="status-chip js-status"><span class="dot"></span> Online</span>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Notifikasi</div>
+                <div class="setting-row">
+                  <div class="icon-box blue sm"><span data-icon="bell"></span></div>
+                  <div class="t"><strong>Notifikasi push</strong><span>Kirim pemberitahuan ke ponsel</span></div>
+                  <button class="switch" role="switch" aria-checked="true" data-notif="push" aria-label="Notifikasi push"></button>
+                </div>
+                <div class="setting-row">
+                  <div class="icon-box red sm"><span data-icon="alert-triangle"></span></div>
+                  <div class="t"><strong>Peringatan bin penuh</strong><span>Saat kapasitas melewati ambang batas</span></div>
+                  <button class="switch" role="switch" aria-checked="true" data-notif="full" aria-label="Peringatan bin penuh"></button>
+                </div>
+                <div class="setting-row">
+                  <div class="icon-box gray sm"><span data-icon="clock"></span></div>
+                  <div class="t"><strong>Ringkasan harian</strong><span>Rekap sampah masuk setiap pukul 18.00</span></div>
+                  <button class="switch" role="switch" aria-checked="false" data-notif="daily" aria-label="Ringkasan harian"></button>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Koneksi alat</div>
+                <div class="kv mono">
+                  <div><span>WiFi SSID</span><strong>LabIoT_2.4G</strong></div>
+                  <div><span>Kekuatan sinyal</span><strong>−58 dBm <em class="ok">Baik</em></strong></div>
+                  <div><span>IP alat</span><strong>192.168.1.42</strong></div>
+                  <div class="wide"><span>MQTT broker</span><strong>broker.hivemq.com:1883</strong></div>
+                  <div><span>Topik</span><strong>smartbin/01/#</strong></div>
+                  <div><span>Status MQTT</span><strong id="mqttStatus"><em class="ok">Terhubung</em></strong></div>
+                </div>
+                <button class="btn btn-soft" id="offlineBtn" style="margin-top: 10px"><span data-icon="power"></span> Uji mode alat offline</button>
+                <p class="hint">Simulasi alat kehilangan koneksi, untuk melihat tampilan error di Beranda.</p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">Data</div>
+                <div class="btn-stack">
+                  <button class="btn btn-soft" id="exportBtn"><span data-icon="download"></span> Ekspor riwayat (CSV)</button>
+                  <button class="btn btn-danger" id="resetBtn"><span data-icon="trash-2"></span> Reset data & riwayat</button>
+                </div>
+                <p class="hint">Menghapus riwayat aktivitas dan statistik di aplikasi. Data di alat tidak terpengaruh.</p>
+              </div>
+
+              <p class="about">
+                Smart Bin Dashboard v1.0 · Mockup UI<br>
+                Proyek Mata Kuliah IoT, D3 Teknik Informatika
+              </p>
+            </section>
+
+          </div>
+
+          <!-- Bottom navigation -->
+          <nav class="bottom-nav" aria-label="Navigasi aplikasi">
+            <button class="nav-item active" data-page="home">
+              <span class="nav-ico"><span data-icon="home"></span></span><span>Beranda</span>
+            </button>
+            <button class="nav-item" data-page="control">
+              <span class="nav-ico"><span data-icon="sliders"></span></span><span>Kontrol</span>
+            </button>
+            <button class="nav-item" data-page="history">
+              <span class="nav-ico"><span data-icon="bar-chart"></span></span><span>Riwayat</span>
+            </button>
+            <button class="nav-item" data-page="settings">
+              <span class="nav-ico"><span data-icon="settings"></span></span><span>Pengaturan</span>
+            </button>
+            <span class="home-indicator"></span>
+          </nav>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+        <!-- Modal konfirmasi reset -->
+        <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+          <div class="sheet">
+            <div class="icon-box red"><span data-icon="alert-triangle"></span></div>
+            <h3 id="modalTitle">Reset data & riwayat?</h3>
+            <p>Semua riwayat aktivitas dan statistik mingguan di aplikasi akan dihapus. Tindakan ini tidak bisa dibatalkan.</p>
+            <div class="sheet-actions">
+              <button class="btn btn-soft" id="modalCancel">Batal</button>
+              <button class="btn btn-danger-solid" id="modalConfirm">Ya, reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ================= /FRAME PONSEL ================= -->
+
+      <div class="stage-spacer" aria-hidden="true"></div>
+    </main>
+  </div>
+
+  <script src="js/icons.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
