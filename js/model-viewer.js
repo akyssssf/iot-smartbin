@@ -19,9 +19,11 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { createTrashDemo } from './trash-demo.js';
+import { createTrashDemo } from './trash-demo.js?v=20260923';
 
-const MODEL_URL = 'models/model-v3.glb';
+// ?v= memaksa browser mengambil versi baru; naikkan bila model/skrip diganti (lihat README)
+const ASSET_VERSION = '20260923';
+const MODEL_URL = 'models/model-v3.glb?v=' + ASSET_VERSION;
 const HIDDEN_NODES = ['brand_label']; // node GLB yang tidak ditampilkan
 
 // Penanda kategori: hanya pintu + gagang laci anorganik yang diwarnai biru (samakan dengan situs).

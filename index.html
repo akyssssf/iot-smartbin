@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/base.css?v=20260923">
+  <link rel="stylesheet" href="css/landing.css?v=20260923">
 </head>
 <body class="landing">
 
@@ -487,8 +487,8 @@
     </div>
   </footer>
 
-  <script src="js/icons.js"></script>
-  <script src="js/landing.js"></script>
+  <script src="js/icons.js?v=20260923"></script>
+  <script src="js/landing.js?v=20260923"></script>
 
   <!-- Three.js dari CDN (ES module). Model 3D perlu dibuka lewat http://, bukan file:// -->
   <script type="importmap">
@@ -500,7 +500,7 @@
   }
   </script>
   <script type="module">
-    import { initModelViewer } from './js/model-viewer.js';
+    import { initModelViewer } from './js/model-viewer.js?v=20260923';
     // Section "Desain Produk": viewer lengkap (zoom, reset), tempat Tahap 2 nanti
     initModelViewer(document.getElementById('modelViewer'), { name: 'main', fit: 1.18, targetY: 0.5 }); // model utuh + bayangan di dalam kartu
     // Hero: viewer ringan: berputar terus, scroll tetap menggulir halaman
