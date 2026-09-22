@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/base.css?v=20260923g">
-  <link rel="stylesheet" href="css/landing.css?v=20260923g">
+  <link rel="stylesheet" href="css/base.css?v=20260923i">
+  <link rel="stylesheet" href="css/landing.css?v=20260923i">
 </head>
 <body class="landing">
 
@@ -326,7 +326,7 @@
             <div class="mv-canvas"></div>
             <div class="mv-status" data-state="loading">Memuat model 3D…</div>
             <div class="mv-actions">
-              <button class="mv-icon-btn mv-sim" type="button">
+              <button class="mv-icon-btn mv-sim" type="button" aria-pressed="false">
                 <span data-icon="zap"></span><span class="label">Jalankan simulasi</span>
               </button>
               <button class="mv-icon-btn mv-reset" type="button">
@@ -517,8 +517,8 @@
     </div>
   </footer>
 
-  <script src="js/icons.js?v=20260923g"></script>
-  <script src="js/landing.js?v=20260923g"></script>
+  <script src="js/icons.js?v=20260923i"></script>
+  <script src="js/landing.js?v=20260923i"></script>
 
   <!-- Three.js dari CDN (ES module). Model 3D perlu dibuka lewat http://, bukan file:// -->
   <script type="importmap">
@@ -530,8 +530,8 @@
   }
   </script>
   <script type="module">
-    import { initModelViewer } from './js/model-viewer.js?v=20260923g';
-    import { initModelTour } from './js/model-tour.js?v=20260923g';
+    import { initModelViewer } from './js/model-viewer.js?v=20260923i';
+    import { initModelTour } from './js/model-tour.js?v=20260923i';
     // Section "Desain Produk": viewer lengkap + tur berpandu. Simulasi menunggu tombol ditekan.
     const mainViewer = initModelViewer(document.getElementById('modelViewer'), {
       name: 'main', fit: 1.18, targetY: 0.5, demo: 'manual',

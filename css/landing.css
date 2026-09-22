@@ -243,8 +243,9 @@
 .mv-icon-btn:disabled { opacity: .6; cursor: default; }
 .mv-icon-btn [data-icon] { width: 17px; height: 17px; }
 .mv-sim { background: var(--forest); color: #fff; }           /* putih di hijau hutan = 10.4:1 */
-.mv-sim:hover:not(:disabled) { background: var(--forest-2); }
-.mv-sim:disabled { background: var(--forest); color: #fff; }
+.mv-sim:hover { background: var(--forest-2); }
+.mv-sim.is-running { background: var(--red-600); }            /* putih di merah-600 = 4.8:1 */
+.mv-sim.is-running:hover { background: var(--red-700); }
 
 .mv-rotate-hint {
   position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); margin: 0;

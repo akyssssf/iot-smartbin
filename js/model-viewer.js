@@ -19,10 +19,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { createTrashDemo } from './trash-demo.js?v=20260923g';
+import { createTrashDemo } from './trash-demo.js?v=20260923i';
 
 // ?v= memaksa browser mengambil versi baru; naikkan bila model/skrip diganti (lihat README)
-const ASSET_VERSION = '20260923g';
+const ASSET_VERSION = '20260923i';
 const MODEL_URL = 'models/model-v3.glb?v=' + ASSET_VERSION;
 const HIDDEN_NODES = ['brand_label']; // node GLB yang tidak ditampilkan
 
@@ -307,6 +307,8 @@ export function initModelViewer(container, opts = {}) {
   const api = {
     name: opts.name || 'viewer', scene, camera, controls, renderer, state, flyTo, ready,
     playDemo: (i, cb) => demo?.playOnce(i, cb),
+    startDemo: (i) => demo?.play(i),
+    stopDemo: () => demo?.stop(),
     demoRunning: () => !!demo?.isRunning(),
     resize,
   };

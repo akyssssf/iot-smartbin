@@ -75,8 +75,9 @@ export function initModelTour(container, viewer) {
       d.setAttribute('aria-current', n === i ? 'step' : 'false');
     });
     viewer.flyTo({ ...s.view, duration: animate ? 900 : 0 });
-    // Langkah platform: miringkan sebentar supaya gerakannya terlihat
-    const pivot = viewer.state.parts?.tilt_platform_pivot;
+    // Langkah platform: miringkan sebentar supaya gerakannya terlihat.
+    // Dilewati saat simulasi berjalan agar tidak berebut mengatur platform.
+    const pivot = viewer.demoRunning() ? null : viewer.state.parts?.tilt_platform_pivot;
     if (pivot) {
       const target = s.tilt === 'organik' ? 0.38 : 0;
       clearTimeout(render._t);
@@ -95,19 +96,29 @@ export function initModelTour(container, viewer) {
     if (e.key === 'ArrowLeft')  { go(i - 1); e.preventDefault(); }
   });
 
-  // ---------- Jalankan simulasi (satu siklus) ----------
-  let simIndex = 0;
+  // ---------- Simulasi: berjalan terus (botol → kulit pisang → kardus) sampai dihentikan ----------
+  const simLabel = simBtn.querySelector('.label');
+  const simIcon  = simBtn.querySelector('[data-icon]');
+  function setSimButton(running) {
+    simBtn.classList.toggle('is-running', running);
+    simLabel.textContent = running ? 'Hentikan simulasi' : 'Jalankan simulasi';
+    simBtn.setAttribute('aria-pressed', String(running));
+    simIcon.dataset.icon = running ? 'power' : 'zap';
+    if (window.renderIcons) renderIcons(simBtn);
+  }
+  function stopSim() {
+    viewer.stopDemo();
+    const pivot = viewer.state.parts?.tilt_platform_pivot;
+    if (pivot) pivot.rotation.z = 0;
+    setSimButton(false);
+  }
   simBtn.addEventListener('click', () => {
-    if (viewer.demoRunning()) return;
-    simBtn.disabled = true;
-    simBtn.querySelector('.label').textContent = 'Sedang berjalan…';
+    if (viewer.demoRunning()) { stopSim(); return; }
     const pivot = viewer.state.parts?.tilt_platform_pivot;
     if (pivot) pivot.rotation.z = 0;
     viewer.flyTo({ azimuth: -24, elevation: 40, fit: 1.15, targetY: 0.62, duration: 700 });
-    viewer.playDemo(simIndex++, () => {
-      simBtn.disabled = false;
-      simBtn.querySelector('.label').textContent = 'Jalankan simulasi';
-    });
+    viewer.startDemo(0);
+    setSimButton(true);
   });
 
   // ---------- Layar penuh + orientasi horizontal di ponsel ----------

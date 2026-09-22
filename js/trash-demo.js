@@ -159,6 +159,7 @@ export function createTrashDemo(scene, parts, { topY }) {
   let idx = 0;
   let paused = false;
   let once = false;        // true = berhenti sendiri setelah satu siklus
+  let stopped = false;     // true = benar-benar berhenti; objek tetap tersembunyi
   let onFinish = null;
   const labelOffset = new THREE.Vector3(0.07, 0.03, 0.02);
 
@@ -168,10 +169,11 @@ export function createTrashDemo(scene, parts, { topY }) {
   }
 
   function update(dt) {
+    if (stopped) return;   // tanpa ini, objek muncul lagi dari posisi waktu yang dibekukan
     if (!paused) t += dt;
     if (t >= T.cycle) {
       if (once) {                       // sekali jalan: berhenti di akhir siklus
-        once = false; paused = true; t = 0; hideAll();
+        once = false; paused = true; stopped = true; t = 0; hideAll();
         const cb = onFinish; onFinish = null; if (cb) cb();
         return;
       }
@@ -264,15 +266,26 @@ export function createTrashDemo(scene, parts, { topY }) {
   // Jalankan satu siklus penuh untuk objek ke-i, lalu berhenti sendiri.
   function playOnce(itemIndex = 0, cb = null) {
     idx = ((itemIndex % items.length) + items.length) % items.length;
-    hideAll(); t = 0; once = true; paused = false; onFinish = cb;
+    hideAll(); t = 0; once = true; paused = false; stopped = false; onFinish = cb;
+  }
+
+  // Jalankan terus-menerus, berganti jenis sampah tiap siklus, sampai stop() dipanggil.
+  function play(itemIndex = 0) {
+    idx = ((itemIndex % items.length) + items.length) % items.length;
+    hideAll(); t = 0; once = false; onFinish = null; paused = false; stopped = false;
+  }
+
+  // Hentikan dan bersihkan: objek disembunyikan, platform kembali ke tengah.
+  function stop() {
+    once = false; onFinish = null; paused = true; stopped = true; t = 0; hideAll();
   }
 
   // Alat bantu tuning dari console:  d = smartBinViewers.hero.state.demo;  d.pause(true); d.seek(1.4)
-  function seek(time, itemIndex = idx) { idx = itemIndex % items.length; hideAll(); t = Math.max(0, time); update(0); }
+  function seek(time, itemIndex = idx) { idx = itemIndex % items.length; hideAll(); stopped = false; t = Math.max(0, time); update(0); }
   function pause(v = true) { paused = v; }
   // ?demo_t=1.5&demo_i=1 di URL → beku di detik ke-1.5 pada objek ke-1 (untuk screenshot / tuning)
   const q = new URLSearchParams(location.search);
   if (q.has('demo_t')) { seek(parseFloat(q.get('demo_t')) || 0, parseInt(q.get('demo_i') || '0', 10)); pause(true); }
 
-  return { update, seek, pause, isHolding, isRunning, playOnce, items, T };
+  return { update, seek, pause, isHolding, isRunning, playOnce, play, stop, items, T };
 }
