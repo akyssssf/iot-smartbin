@@ -1,0 +1,297 @@
+{
+  "version": 1,
+  "author": "Tim Smart Bin",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "us1",
+      "top": -230,
+      "left": -260,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-hc-sr04",
+      "id": "us2",
+      "top": -230,
+      "left": 120,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-pir-motion-sensor",
+      "id": "ir",
+      "top": 40,
+      "left": -300,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "moist",
+      "top": 200,
+      "left": -300,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo",
+      "top": 320,
+      "left": -120,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd",
+      "top": 320,
+      "left": 120,
+      "attrs": {
+        "pins": "i2c"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledG",
+      "top": -20,
+      "left": 300,
+      "attrs": {
+        "color": "green",
+        "label": "Normal"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledY",
+      "top": 80,
+      "left": 300,
+      "attrs": {
+        "color": "yellow",
+        "label": "Hampir penuh"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledR",
+      "top": 180,
+      "left": 300,
+      "attrs": {
+        "color": "red",
+        "label": "Penuh"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rG",
+      "top": 20,
+      "left": 220,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rY",
+      "top": 120,
+      "left": 220,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rR",
+      "top": 220,
+      "left": 220,
+      "attrs": {
+        "value": "220"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "us1:VCC",
+      "esp:5V",
+      "red",
+      []
+    ],
+    [
+      "us1:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "us1:TRIG",
+      "esp:5",
+      "orange",
+      []
+    ],
+    [
+      "us1:ECHO",
+      "esp:18",
+      "green",
+      []
+    ],
+    [
+      "us2:VCC",
+      "esp:5V",
+      "red",
+      []
+    ],
+    [
+      "us2:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "us2:TRIG",
+      "esp:19",
+      "orange",
+      []
+    ],
+    [
+      "us2:ECHO",
+      "esp:23",
+      "green",
+      []
+    ],
+    [
+      "ir:VCC",
+      "esp:5V",
+      "red",
+      []
+    ],
+    [
+      "ir:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "ir:OUT",
+      "esp:14",
+      "violet",
+      []
+    ],
+    [
+      "moist:VCC",
+      "esp:3V3",
+      "red",
+      []
+    ],
+    [
+      "moist:GND",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "moist:SIG",
+      "esp:34",
+      "blue",
+      []
+    ],
+    [
+      "servo:V+",
+      "esp:5V",
+      "red",
+      []
+    ],
+    [
+      "servo:GND",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "servo:PWM",
+      "esp:13",
+      "orange",
+      []
+    ],
+    [
+      "lcd:VCC",
+      "esp:5V",
+      "red",
+      []
+    ],
+    [
+      "lcd:GND",
+      "esp:GND.2",
+      "black",
+      []
+    ],
+    [
+      "lcd:SDA",
+      "esp:21",
+      "cyan",
+      []
+    ],
+    [
+      "lcd:SCL",
+      "esp:22",
+      "magenta",
+      []
+    ],
+    [
+      "esp:25",
+      "rG:1",
+      "green",
+      []
+    ],
+    [
+      "rG:2",
+      "ledG:A",
+      "green",
+      []
+    ],
+    [
+      "ledG:C",
+      "esp:GND.3",
+      "black",
+      []
+    ],
+    [
+      "esp:26",
+      "rY:1",
+      "gold",
+      []
+    ],
+    [
+      "rY:2",
+      "ledY:A",
+      "gold",
+      []
+    ],
+    [
+      "ledY:C",
+      "esp:GND.3",
+      "black",
+      []
+    ],
+    [
+      "esp:27",
+      "rR:1",
+      "red",
+      []
+    ],
+    [
+      "rR:2",
+      "ledR:A",
+      "red",
+      []
+    ],
+    [
+      "ledR:C",
+      "esp:GND.3",
+      "black",
+      []
+    ]
+  ]
+}

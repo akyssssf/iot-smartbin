@@ -1,0 +1,6 @@
+# Konfigurasi ekstensi Wokwi untuk VS Code (https://docs.wokwi.com/vscode/project-config)
+# Harus di root workspace bersama diagram.json. Firmware dibuat oleh wokwi/build.sh.
+[wokwi]
+version = 1
+firmware = "wokwi/build/smartbin.ino.bin"
+elf = "wokwi/build/smartbin.ino.elf"

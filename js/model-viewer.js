@@ -21,7 +21,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createTrashDemo } from './trash-demo.js';
 
-const MODEL_URL = 'models/smart-bin-casing-v2.glb';
+const MODEL_URL = 'models/smart-bin-casing-new.glb';
+const HIDDEN_NODES = ['brand_label']; // node GLB yang tidak ditampilkan
 
 // Sudut kamera awal (derajat). Model menghadap +Z: panel LCD/LED & pegangan laci
 // di depan, laci organik di kiri (−X), anorganik di kanan (+X), lubang masuk di
@@ -117,6 +118,8 @@ export function initModelViewer(container, opts = {}) {
         // Samakan dengan palet situs: anorganik = biru (material GLB aslinya coral)
         if (o.material?.name === 'mat_anorganic_coral') { o.material = o.material.clone(); o.material.color.set('#2563eb'); }
       });
+      // Sembunyikan label "SMART BIN" di panel depan (permintaan pemilik); node lain tetap
+      HIDDEN_NODES.forEach((n) => { const o = model.getObjectByName(n); if (o) o.visible = false; });
 
       // Center model di origin (x/z), letakkan dasarnya di y = 0 (di atas lantai bayangan)
       const box = new THREE.Box3().setFromObject(model);

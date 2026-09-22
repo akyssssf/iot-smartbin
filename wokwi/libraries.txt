@@ -1,0 +1,4 @@
+# Library yang dipakai sketch.ino (Wokwi memasangnya otomatis)
+PubSubClient
+LiquidCrystal I2C
+ESP32Servo

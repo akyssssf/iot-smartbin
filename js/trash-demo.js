@@ -131,7 +131,7 @@ export function createTrashDemo(scene, parts, { topY }) {
   // lubang masuk berada di antara pusat platform dan slot sensor IR (bagian belakang atap)
   const drop = new THREE.Vector3(platformPos.x, 0, lerp(platformPos.z, slotPos.z, 0.35));
   const spawnY = topY + 0.13;   // titik awal turun (di atas atap, masih di dalam frame hero)
-  const restY  = topY + 0.03;   // titik berhenti: di mulut lubang, seolah mendarat di platform
+  const restY  = topY + 0.012;  // titik berhenti: setengah masuk mulut lubang, seolah duduk di platform
   const exitY  = platformPos.y - 0.03; // titik akhir meluncur (sudah di bawah atap)
   const trays = {
     organik: worldPos(parts.drawer_organic_tray) || new THREE.Vector3(-0.073, 0, 0),
