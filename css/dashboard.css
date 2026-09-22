@@ -58,6 +58,14 @@
 .app-content { flex: 1; overflow-y: auto; padding: 0 16px 20px; scrollbar-width: none; }
 .app-content::-webkit-scrollbar { display: none; }
 
+/* Mode sentuh: di dalam frame ponsel, kursor mouse berperilaku seperti jari.
+   Tekan lalu geser untuk menggulir (lihat js/dashboard.js). */
+@media (hover: hover) {
+  .phone .app-content { cursor: grab; }
+  .phone .app-content.is-dragging { cursor: grabbing; user-select: none; -webkit-user-select: none; }
+  .phone .app-content.is-dragging * { pointer-events: none; } /* jangan memicu hover tombol saat menggeser */
+}
+
 .page { display: none; animation: pageIn .25s ease; }
 .page.active { display: block; }
 @keyframes pageIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }

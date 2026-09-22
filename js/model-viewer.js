@@ -21,8 +21,16 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createTrashDemo } from './trash-demo.js';
 
-const MODEL_URL = 'models/smart-bin-casing-new.glb';
+const MODEL_URL = 'models/model-v3.glb';
 const HIDDEN_NODES = ['brand_label']; // node GLB yang tidak ditampilkan
+
+// Penanda kategori: hanya pintu + gagang laci anorganik yang diwarnai biru (samakan dengan situs).
+// Di model v3 material coral dipakai ulang untuk gagang tutup atas, jadi pencocokan per nama node,
+// bukan per material; gagang tutup dinetralkan agar palet tetap hijau + biru + netral.
+const ANORGANIC_NODES = ['panel_anorganic', 'drawer_anorganic_handle_bar',
+  'drawer_anorganic_handle_leg_1', 'drawer_anorganic_handle_leg_2'];
+const COLOR_ANORGANIC = '#2563eb';
+const COLOR_NEUTRAL_HANDLE = '#6b7280';
 
 // Sudut kamera awal (derajat). Model menghadap +Z: panel LCD/LED & pegangan laci
 // di depan, laci organik di kiri (−X), anorganik di kanan (+X), lubang masuk di
@@ -115,8 +123,9 @@ export function initModelViewer(container, opts = {}) {
       model.traverse((o) => {
         if (!o.isMesh) return;
         o.castShadow = true; o.receiveShadow = true;
-        // Samakan dengan palet situs: anorganik = biru (material GLB aslinya coral)
-        if (o.material?.name === 'mat_anorganic_coral') { o.material = o.material.clone(); o.material.color.set('#2563eb'); }
+        if (o.material?.name !== 'mat_anorganic_coral') return;
+        o.material = o.material.clone();
+        o.material.color.set(ANORGANIC_NODES.includes(o.name) ? COLOR_ANORGANIC : COLOR_NEUTRAL_HANDLE);
       });
       // Sembunyikan label "SMART BIN" di panel depan (permintaan pemilik); node lain tetap
       HIDDEN_NODES.forEach((n) => { const o = model.getObjectByName(n); if (o) o.visible = false; });

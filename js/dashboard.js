@@ -359,6 +359,60 @@
     toastTimer = setTimeout(() => t.classList.remove('show'), duration);
   }
 
+  // ---------- Mode sentuh: tekan lalu geser untuk menggulir (meniru jari di layar HP) ----------
+  // Hanya untuk mouse; di layar sentuh sudah ada scroll bawaan. Klik biasa tetap jalan karena
+  // geseran baru dianggap "drag" setelah melewati ambang 4 px.
+  (function enableDragScroll() {
+    if (!matchMedia('(hover: hover)').matches) return;
+    const el = $('#appContent');
+    const DRAG_THRESHOLD = 4;
+    let startY = 0, startTop = 0, dragging = false, moved = false;
+    let lastY = 0, lastT = 0, velocity = 0, glideId = 0;
+
+    el.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      cancelAnimationFrame(glideId);
+      dragging = true; moved = false;
+      startY = lastY = e.clientY; startTop = el.scrollTop;
+      lastT = performance.now(); velocity = 0;
+    });
+
+    el.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const dy = e.clientY - startY;
+      if (!moved && Math.abs(dy) < DRAG_THRESHOLD) return;
+      if (!moved) { moved = true; el.classList.add('is-dragging'); el.setPointerCapture(e.pointerId); }
+      el.scrollTop = startTop - dy;
+      const now = performance.now(), dt = now - lastT;
+      if (dt > 0) velocity = (e.clientY - lastY) / dt; // px per ms
+      lastY = e.clientY; lastT = now;
+    });
+
+    const release = (e) => {
+      if (!dragging) return;
+      dragging = false;
+      if (!moved) return;
+      el.classList.remove('is-dragging');
+      if (el.hasPointerCapture?.(e.pointerId)) el.releasePointerCapture(e.pointerId);
+      // inersia: lanjut meluncur lalu melambat, seperti scroll di ponsel
+      let v = velocity * 16; // px per frame
+      const glide = () => {
+        if (Math.abs(v) < 0.4) return;
+        el.scrollTop -= v;
+        v *= 0.94;
+        glideId = requestAnimationFrame(glide);
+      };
+      glideId = requestAnimationFrame(glide);
+      // batalkan klik yang terlanjur terpicu di akhir geseran
+      const swallow = (ev) => { ev.stopPropagation(); ev.preventDefault(); };
+      el.addEventListener('click', swallow, { capture: true, once: true });
+      setTimeout(() => el.removeEventListener('click', swallow, { capture: true }), 0);
+    };
+    el.addEventListener('pointerup', release);
+    el.addEventListener('pointercancel', release);
+    el.addEventListener('dragstart', (e) => e.preventDefault()); // jangan seret teks/gambar
+  })();
+
   // ---------- Jam status bar & indikator sinkronisasi ----------
   function tickClock() { $('#clock').textContent = nowHM(); }
   let syncSec = 3;
