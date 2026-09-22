@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/base.css?v=20260923">
-  <link rel="stylesheet" href="css/landing.css?v=20260923">
+  <link rel="stylesheet" href="css/base.css?v=20260923g">
+  <link rel="stylesheet" href="css/landing.css?v=20260923g">
 </head>
 <body class="landing">
 
@@ -310,27 +310,57 @@
   <section id="desain" class="section">
     <div class="container">
       <!-- Komponen penampil 3D: logika ada di js/model-viewer.js. Wrapper = container viewer. -->
-      <div class="overlap model-viewer reveal" id="modelViewer">
-        <div class="overlap-media">
-          <div class="mv-canvas"></div>
-          <div class="mv-status" data-state="loading">Memuat model 3D…</div>
-        </div>
-        <div class="overlap-card">
-          <span class="eyebrow">Desain Produk</span>
-          <h2>Lihat desain produk kami</h2>
-          <p>
-            Model 3D casing Smart Bin: lubang masuk di atas, platform pemilah, dan dua laci
-            kompartemen organik & anorganik. Putar dan perbesar untuk melihat detailnya.
-          </p>
-          <div class="mv-toolbar">
-            <span class="mv-hint"><span data-icon="rotate-cw"></span> Drag untuk memutar · Scroll / cubit untuk zoom</span>
-            <button class="mv-reset" type="button"><span data-icon="refresh"></span> Reset tampilan</button>
+      <div class="section-head reveal">
+        <span class="eyebrow">Desain Produk</span>
+        <h2>Lihat desain produk kami</h2>
+        <p>
+          Model 3D casing Smart Bin. Ikuti penjelasan langkah demi langkah, atau jalankan
+          simulasi untuk melihat sampah dipilah.
+        </p>
+      </div>
+
+      <!-- Penampil 3D + tur berpandu. Logika: js/model-viewer.js dan js/model-tour.js -->
+      <div class="model-viewer reveal" id="modelViewer" tabindex="-1">
+        <div class="mv-stage">
+          <div class="mv-media">
+            <div class="mv-canvas"></div>
+            <div class="mv-status" data-state="loading">Memuat model 3D…</div>
+            <div class="mv-actions">
+              <button class="mv-icon-btn mv-sim" type="button">
+                <span data-icon="zap"></span><span class="label">Jalankan simulasi</span>
+              </button>
+              <button class="mv-icon-btn mv-reset" type="button">
+                <span data-icon="refresh"></span><span class="label">Reset tampilan</span>
+              </button>
+              <button class="mv-icon-btn mv-fullscreen" type="button" aria-pressed="false">
+                <span data-icon="monitor"></span><span class="label">Layar penuh</span>
+              </button>
+            </div>
+            <p class="mv-rotate-hint" hidden>Putar ponsel ke posisi horizontal untuk tampilan lebih lega.</p>
           </div>
-          <ul class="mv-legend">
-            <li><i style="background: #16a34a"></i> Laci organik (kiri)</li>
-            <li><i style="background: #2563eb"></i> Laci anorganik (kanan)</li>
-            <li><i style="background: #374151"></i> Panel LCD & LED (depan)</li>
-          </ul>
+
+          <div class="mv-panel">
+            <div class="tour-head">
+              <span class="tour-step">1 / 6</span>
+              <span class="mv-hint"><span data-icon="rotate-cw"></span> Drag untuk memutar</span>
+            </div>
+            <h3 class="tour-title">Lubang masuk</h3>
+            <p class="tour-text">Memuat…</p>
+            <div class="tour-nav">
+              <button class="btn btn-outline btn-sm tour-prev" type="button">
+                <span data-icon="arrow-left"></span> Sebelumnya
+              </button>
+              <button class="btn btn-primary btn-sm tour-next" type="button">
+                Berikutnya <span data-icon="arrow-right"></span>
+              </button>
+            </div>
+            <div class="tour-dots" role="group" aria-label="Pilih langkah"></div>
+            <ul class="mv-legend">
+              <li><i style="background: #16a34a"></i> Laci organik (kiri)</li>
+              <li><i style="background: #2563eb"></i> Laci anorganik (kanan)</li>
+              <li><i style="background: #374151"></i> Panel LCD & LED (depan)</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -487,8 +517,8 @@
     </div>
   </footer>
 
-  <script src="js/icons.js?v=20260923"></script>
-  <script src="js/landing.js?v=20260923"></script>
+  <script src="js/icons.js?v=20260923g"></script>
+  <script src="js/landing.js?v=20260923g"></script>
 
   <!-- Three.js dari CDN (ES module). Model 3D perlu dibuka lewat http://, bukan file:// -->
   <script type="importmap">
@@ -500,9 +530,13 @@
   }
   </script>
   <script type="module">
-    import { initModelViewer } from './js/model-viewer.js?v=20260923';
-    // Section "Desain Produk": viewer lengkap (zoom, reset), tempat Tahap 2 nanti
-    initModelViewer(document.getElementById('modelViewer'), { name: 'main', fit: 1.18, targetY: 0.5 }); // model utuh + bayangan di dalam kartu
+    import { initModelViewer } from './js/model-viewer.js?v=20260923g';
+    import { initModelTour } from './js/model-tour.js?v=20260923g';
+    // Section "Desain Produk": viewer lengkap + tur berpandu. Simulasi menunggu tombol ditekan.
+    const mainViewer = initModelViewer(document.getElementById('modelViewer'), {
+      name: 'main', fit: 1.18, targetY: 0.5, demo: 'manual',
+    });
+    initModelTour(document.getElementById('modelViewer'), mainViewer);
     // Hero: viewer ringan: berputar terus, scroll tetap menggulir halaman
     initModelViewer(document.getElementById('heroViewer'), {
       name: 'hero', enableZoom: false, resumeAutoRotate: true, fit: 1.0, elevation: 28, targetY: 0.42, // target rendah → model naik, bayangan dapat ruang di bawah

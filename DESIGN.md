@@ -32,6 +32,12 @@ kosong.
   anorganik/teknologi.
 
 ## Catatan keputusan (R-31)
+- Section "Desain Produk" memakai tur berpandu (6 langkah, tombol next/back) karena penjelasan
+  bertahap lebih mudah dicerna daripada satu paragraf panjang; isi langkah hanya menyebut bagian
+  yang benar-benar ada di model GLB.
+- Layar penuh punya dua jalur: Fullscreen API bila diizinkan, dan mode CSS bila ditolak
+  (iPhone Safari tidak mendukung fullscreen untuk elemen), supaya tombolnya selalu berfungsi.
+- Penguncian orientasi horizontal hanya bisa di Android; di iOS diganti imbauan memutar ponsel.
 - Label section huruf besar (eyebrow, judul card dashboard): pembeda visual label kecil dari judul;
   tracking dijaga rapat (.03–.04em).
 - Ikon Lucide: diminta eksplisit di brief; dipilih per relevansi konten (daun = organik, kotak = anorganik).

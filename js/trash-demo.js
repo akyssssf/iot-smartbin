@@ -158,6 +158,8 @@ export function createTrashDemo(scene, parts, { topY }) {
   let t = 0;
   let idx = 0;
   let paused = false;
+  let once = false;        // true = berhenti sendiri setelah satu siklus
+  let onFinish = null;
   const labelOffset = new THREE.Vector3(0.07, 0.03, 0.02);
 
   function hideAll() {
@@ -167,7 +169,14 @@ export function createTrashDemo(scene, parts, { topY }) {
 
   function update(dt) {
     if (!paused) t += dt;
-    if (t >= T.cycle) { t -= T.cycle; idx = (idx + 1) % items.length; hideAll(); }
+    if (t >= T.cycle) {
+      if (once) {                       // sekali jalan: berhenti di akhir siklus
+        once = false; paused = true; t = 0; hideAll();
+        const cb = onFinish; onFinish = null; if (cb) cb();
+        return;
+      }
+      t -= T.cycle; idx = (idx + 1) % items.length; hideAll();
+    }
     const it = items[idx];
     const isOrg = it.type === 'organik';
 
@@ -250,6 +259,13 @@ export function createTrashDemo(scene, parts, { topY }) {
 
   // true selama objek diam di tengah (dipakai viewer untuk menjeda putaran kamera)
   function isHolding() { return t >= T.holdStart && t < T.slideStart; }
+  function isRunning() { return !paused; }
+
+  // Jalankan satu siklus penuh untuk objek ke-i, lalu berhenti sendiri.
+  function playOnce(itemIndex = 0, cb = null) {
+    idx = ((itemIndex % items.length) + items.length) % items.length;
+    hideAll(); t = 0; once = true; paused = false; onFinish = cb;
+  }
 
   // Alat bantu tuning dari console:  d = smartBinViewers.hero.state.demo;  d.pause(true); d.seek(1.4)
   function seek(time, itemIndex = idx) { idx = itemIndex % items.length; hideAll(); t = Math.max(0, time); update(0); }
@@ -258,5 +274,5 @@ export function createTrashDemo(scene, parts, { topY }) {
   const q = new URLSearchParams(location.search);
   if (q.has('demo_t')) { seek(parseFloat(q.get('demo_t')) || 0, parseInt(q.get('demo_i') || '0', 10)); pause(true); }
 
-  return { update, seek, pause, isHolding, items, T };
+  return { update, seek, pause, isHolding, isRunning, playOnce, items, T };
 }

@@ -87,7 +87,7 @@ tombolnya berwarna merah "lembut", bukan tombol utama.
 
 GitHub Pages menyuruh browser menyimpan aset selama 10 menit (`max-age=600`), sehingga setelah
 push, halaman bisa memakai HTML baru dengan JS lama. Karena itu alamat aset diberi penanda versi
-(`?v=20260923`). **Setiap kali mengubah CSS, JS, atau file model, naikkan penandanya** di:
+(`?v=20260923g`). **Setiap kali mengubah CSS, JS, atau file model, naikkan penandanya** di:
 
 - `index.html` dan `dashboard.html` (tag `<link>`, `<script>`, dan `import`)
 - `js/model-viewer.js` (konstanta `ASSET_VERSION`)
@@ -95,7 +95,7 @@ push, halaman bisa memakai HTML baru dengan JS lama. Karena itu alamat aset dibe
 Cara cepat mengganti semuanya sekaligus (ganti tanggalnya):
 
 ```bash
-grep -rl "v=20260923" index.html dashboard.html js/ | xargs sed -i '' 's/v=20260923/v=20260930/g'
+grep -rl "v=20260923g" index.html dashboard.html js/ | xargs sed -i '' 's/v=20260923g/v=20260923g/g'
 ```
 
 ## Kredit foto

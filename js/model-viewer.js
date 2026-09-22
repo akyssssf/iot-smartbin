@@ -12,17 +12,17 @@
      opts.fit               : faktor jarak kamera (<1 lebih dekat), default 0.92
      opts.targetY           : titik pandang vertikal (0..1 dari tinggi model), default 0.48; lebih besar = model turun di frame
      opts.azimuth/elevation : sudut kamera awal (derajat), default dari VIEW
-     opts.demo              : true → jalankan animasi sampah jatuh & sortir (Tahap 2, hanya di hero)
+     opts.demo              : true → animasi sampah berjalan terus; 'manual' → siap tapi menunggu api.playDemo()
      opts.pauseRotateOnHold : true (default) → putaran kamera berhenti halus saat objek diam di tengah
      opts.mouseParallax     : true → seluruh scene menoleh halus mengikuti posisi kursor (hanya mouse)
    ===================================================================== */
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { createTrashDemo } from './trash-demo.js?v=20260923';
+import { createTrashDemo } from './trash-demo.js?v=20260923g';
 
 // ?v= memaksa browser mengambil versi baru; naikkan bila model/skrip diganti (lihat README)
-const ASSET_VERSION = '20260923';
+const ASSET_VERSION = '20260923g';
 const MODEL_URL = 'models/model-v3.glb?v=' + ASSET_VERSION;
 const HIDDEN_NODES = ['brand_label']; // node GLB yang tidak ditampilkan
 
@@ -111,10 +111,14 @@ export function initModelViewer(container, opts = {}) {
     model: null,       // THREE.Group hasil load GLB
     parts: {},         // node penting dari GLB (lihat daftar di bawah)
     radius: 1,         // jari-jari bounding sphere model (untuk skala animasi)
+    size: null,        // ukuran bounding box model
     homeView: null,    // posisi kamera awal untuk tombol "Reset tampilan"
   };
   const clock = new THREE.Clock();
-  let demo = null; // TAHAP 2: dibuat setelah model termuat (lihat trash-demo.js)
+  let demo = null;
+  // Janji yang ditepati saat model selesai dimuat, dipakai tur agar kamera langkah 1 benar
+  let markReady;
+  const ready = new Promise((res) => { markReady = res; }); // TAHAP 2: dibuat setelah model termuat (lihat trash-demo.js)
 
   // ---------- Load model GLB ----------
   setStatus('loading', 'Memuat model 3D…');
@@ -143,13 +147,7 @@ export function initModelViewer(container, opts = {}) {
       const radius = size.length() / 2;
       const target = new THREE.Vector3(0, size.y * (opts.targetY ?? 0.48), 0);
       const dist = (radius / Math.sin(THREE.MathUtils.degToRad(view.fov) / 2)) * fitFactor; // <1 = sedikit lebih dekat dari bounding sphere
-      const az = THREE.MathUtils.degToRad(view.azimuth);
-      const el = THREE.MathUtils.degToRad(view.elevation);
-      camera.position.set(
-        target.x + dist * Math.cos(el) * Math.sin(az),
-        target.y + dist * Math.sin(el),
-        target.z + dist * Math.cos(el) * Math.cos(az)
-      );
+      camera.position.copy(orbitPos(target, dist, view.azimuth, view.elevation));
       camera.near = radius / 50; camera.far = radius * 50;
       camera.updateProjectionMatrix();
       controls.target.copy(target);
@@ -170,13 +168,16 @@ export function initModelViewer(container, opts = {}) {
 
       state.model = model;
       state.radius = radius;
+      state.size = size;
       state.homeView = { position: camera.position.clone(), target: target.clone() };
       setStatus('ready');
+      markReady(api);
 
       // TAHAP 2: animasi demo (hanya jika opts.demo). Posisi lubang/platform/laci diambil dari node GLB.
       if (opts.demo) {
         world.updateMatrixWorld(true);
         demo = createTrashDemo(world, state.parts, { topY: size.y });
+        if (opts.demo === 'manual') demo.pause(true); // menunggu tombol "Jalankan simulasi"
         state.demo = demo; // bisa diintip dari console: smartBinViewers.hero.state.demo
       }
     },
@@ -189,6 +190,38 @@ export function initModelViewer(container, opts = {}) {
         : 'Model 3D gagal dimuat. Periksa path ' + MODEL_URL + '.');
     }
   );
+
+  // Posisi kamera pada sudut azimuth/elevation (derajat) dan jarak tertentu dari titik pandang
+  function orbitPos(target, dist, azDeg, elDeg) {
+    const az = THREE.MathUtils.degToRad(azDeg), el = THREE.MathUtils.degToRad(elDeg);
+    return new THREE.Vector3(
+      target.x + dist * Math.cos(el) * Math.sin(az),
+      target.y + dist * Math.sin(el),
+      target.z + dist * Math.cos(el) * Math.cos(az)
+    );
+  }
+
+  // ---------- Gerak kamera halus (dipakai tur "Desain Produk") ----------
+  let fly = null;
+  function flyTo({ azimuth, elevation, fit = 1, targetY = 0.5, duration = 900 } = {}) {
+    if (!state.model) return;
+    const target = new THREE.Vector3(0, state.size.y * targetY, 0);
+    const dist = (state.radius / Math.sin(THREE.MathUtils.degToRad(view.fov) / 2)) * fit;
+    controls.autoRotate = false;
+    fly = {
+      t: 0, duration,
+      fromPos: camera.position.clone(), toPos: orbitPos(target, dist, azimuth, elevation),
+      fromTarget: controls.target.clone(), toTarget: target,
+    };
+  }
+  function updateFly(dt) {
+    if (!fly) return;
+    fly.t = Math.min(1, fly.t + (dt * 1000) / fly.duration);
+    const p = fly.t < 0.5 ? 4 * fly.t ** 3 : 1 - Math.pow(-2 * fly.t + 2, 3) / 2; // easeInOutCubic
+    camera.position.lerpVectors(fly.fromPos, fly.toPos, p);
+    controls.target.lerpVectors(fly.fromTarget, fly.toTarget, p);
+    if (fly.t >= 1) fly = null;
+  }
 
   // ---------- Reset tampilan ----------
   resetBtn?.addEventListener('click', () => {
@@ -245,6 +278,7 @@ export function initModelViewer(container, opts = {}) {
   const baseRotateSpeed = controls.autoRotateSpeed;
   function update(dt) {
     dt = Math.min(dt, 0.05);
+    updateFly(dt);
     if (opts.mouseParallax) {
       const k = Math.min(1, dt * 3);
       world.rotation.y += (parallax.x * 0.14 - world.rotation.y) * k;
@@ -270,7 +304,12 @@ export function initModelViewer(container, opts = {}) {
 
   // Diekspos untuk debugging di console & pengembangan Tahap 2
   // window.smartBinViewer = instance 'main' (section Desain Produk); semua instance di window.smartBinViewers
-  const api = { name: opts.name || 'viewer', scene, camera, controls, renderer, state };
+  const api = {
+    name: opts.name || 'viewer', scene, camera, controls, renderer, state, flyTo, ready,
+    playDemo: (i, cb) => demo?.playOnce(i, cb),
+    demoRunning: () => !!demo?.isRunning(),
+    resize,
+  };
   window.smartBinViewers = window.smartBinViewers || {};
   window.smartBinViewers[api.name] = api;
   if (api.name === 'main' || !window.smartBinViewer) window.smartBinViewer = api;
