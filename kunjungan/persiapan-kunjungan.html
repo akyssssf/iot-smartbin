@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Persiapan Kunjungan Industri · Smart Bin</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--forest:#1b4d3e;--forest2:#123a2e;--mint:#eaf6ee;--mint2:#d9efe0;--line:#c9ded1;
+        --ink:#111827;--muted:#4b5563;--blue:#1d4ed8;--amber:#b45309;}
+  *{box-sizing:border-box}
+  body{margin:0;background:#f3f4f6;color:var(--ink);
+       font:400 15px/1.65 'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .sheet{max-width:820px;margin:24px auto;background:#fff;padding:44px 52px;
+         box-shadow:0 10px 40px -20px rgba(0,0,0,.35);border-radius:6px}
+  h1{font-size:1.9rem;line-height:1.15;color:var(--forest);margin:0 0 .35rem;letter-spacing:-.02em}
+  h2{font-size:1.15rem;color:var(--forest);margin:2.2rem 0 .75rem;padding-bottom:.4rem;
+     border-bottom:2px solid var(--mint2);letter-spacing:-.01em}
+  h3{font-size:.98rem;margin:1.4rem 0 .5rem;color:var(--forest2)}
+  p{margin:0 0 .7rem}
+  .lead{color:var(--muted);font-size:.95rem}
+  .tag{display:inline-block;background:var(--mint);color:var(--forest);font-size:.72rem;font-weight:700;
+       letter-spacing:.04em;text-transform:uppercase;padding:.3rem .7rem;border-radius:999px;margin-bottom:.8rem}
+  ol,ul{margin:0 0 .8rem;padding-left:1.25rem}
+  li{margin-bottom:.4rem}
+  .q{margin-bottom:1.1rem}
+  .q>b{display:block;font-weight:700;margin-bottom:.15rem}
+  .why{font-size:.84rem;color:var(--muted);border-left:3px solid var(--mint2);padding-left:.7rem;margin-top:.3rem}
+  .why b{color:var(--forest2);font-weight:700}
+  .box{background:var(--mint);border-radius:10px;padding:1rem 1.2rem;margin:1rem 0}
+  .box.warn{background:#fffbeb;border-left:4px solid var(--amber)}
+  .box.warn b{color:var(--amber)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem 1.4rem}
+  table{width:100%;border-collapse:collapse;margin:.6rem 0 1rem;font-size:.9rem}
+  th,td{border:1px solid var(--line);padding:.5rem .6rem;text-align:left;vertical-align:top}
+  th{background:var(--mint);color:var(--forest);font-weight:700;font-size:.82rem}
+  .fill{border-bottom:1px solid var(--line);min-height:1.5rem;display:block;margin:.35rem 0}
+  .fill.tall{min-height:3.6rem}
+  .fill.xtall{min-height:5.5rem}
+  .muted{color:var(--muted)}
+  .foot{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--line);
+        font-size:.82rem;color:var(--muted);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+  .pagebreak{page-break-before:always}
+  .noprint{margin:20px auto;max-width:820px;padding:0 52px}
+  .noprint button{font:inherit;font-weight:700;background:var(--forest);color:#fff;border:0;
+                  padding:.7rem 1.2rem;border-radius:999px;cursor:pointer}
+  @media print{
+    body{background:#fff}
+    .sheet{box-shadow:none;margin:0;max-width:none;padding:0;border-radius:0}
+    .noprint{display:none}
+    h2{page-break-after:avoid}
+    .q,.box,table{page-break-inside:avoid}
+    @page{size:A4;margin:16mm 14mm}
+  }
+</style>
+</head>
+<body>
+
+<div class="noprint"><button onclick="window.print()">Cetak / simpan sebagai PDF</button></div>
+
+<!-- ============ BAGIAN 1: RINGKASAN PROYEK (untuk diberikan ke narasumber) ============ -->
+<div class="sheet">
+  <span class="tag">Bagian 1 · Untuk diberikan ke narasumber</span>
+  <h1>Smart Bin</h1>
+  <p class="lead"><b>Tempat sampah pemilah otomatis berbasis IoT.</b><br>
+  Proyek mata kuliah IoT, D3 Teknik Informatika.</p>
+
+  <h2>Apa yang sedang kami buat</h2>
+  <p>Tempat sampah yang memilah sampah organik dan anorganik secara otomatis saat sampah dimasukkan,
+  lalu melaporkan tingkat keterisian tiap kompartemen ke aplikasi secara real-time.</p>
+
+  <h3>Cara kerjanya</h3>
+  <ol>
+    <li>Sampah dimasukkan lewat lubang atas; <b>sensor inframerah</b> mendeteksi ada benda masuk.</li>
+    <li><b>Sensor kelembaban</b> membaca sampah: lembab diarahkan sebagai organik, kering sebagai anorganik.</li>
+    <li><b>Satu motor servo</b> memiringkan platform ke kiri (organik) atau kanan (anorganik).</li>
+    <li><b>Dua sensor ultrasonik</b> mengukur ketinggian isi tiap kompartemen.</li>
+    <li><b>ESP32</b> mengirim data lewat WiFi/MQTT ke dashboard; LCD dan LED menampilkan status di alat.</li>
+  </ol>
+
+  <h3>Status saat ini</h3>
+  <p>Rangkaian sudah berjalan di simulator (Wokwi): sensor, servo, LCD, dan LED berfungsi.
+  Dashboard dan halaman informasi proyek sudah jadi. <b>Belum dirakit secara fisik.</b></p>
+
+  <h3>Rencana pengembangan</h3>
+  <table>
+    <tr><th style="width:26%">Tahap</th><th>Isi</th></tr>
+    <tr><td>1 · Pemilah</td><td>Deteksi dan pemilahan otomatis <span class="muted">(selesai di simulasi)</span></td></tr>
+    <tr><td>2 · Kapasitas</td><td>Pemantauan keterisian dan notifikasi penuh <span class="muted">(sedang berjalan)</span></td></tr>
+    <tr><td>3 · Bank Sampah Digital</td><td>Timbangan (load cell) dan identitas nasabah (RFID)</td></tr>
+    <tr><td>4 · Capstone</td><td>Integrasi seluruh modul, dashboard terpadu</td></tr>
+  </table>
+
+  <div class="box">
+    <b>Yang kami harapkan dari kunjungan ini</b>
+    <ul style="margin-bottom:0">
+      <li>Memahami cara pemilahan dan pencatatan yang benar-benar dipakai di lapangan.</li>
+      <li>Menguji apakah asumsi teknis kami masuk akal untuk kondisi nyata.</li>
+      <li>Mengetahui kendala yang sering membuat alat bantu gagal dipakai.</li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    <span>Tim Smart Bin · D3 Teknik Informatika</span>
+    <span>Kontak: ____________________</span>
+  </div>
+</div>
+
+<!-- ============ BAGIAN 2: DAFTAR PERTANYAAN ============ -->
+<div class="sheet pagebreak">
+  <span class="tag">Bagian 2 · Pegangan penanya</span>
+  <h1>Daftar pertanyaan</h1>
+  <p class="lead">Urut dari yang ringan ke yang spesifik. Tidak harus semua ditanyakan, pilih yang
+  paling relevan dengan tempat yang dikunjungi. Tulisan kecil berwarna abu adalah alasan kenapa
+  pertanyaan itu penting untuk proyek kita, jangan dibacakan.</p>
+
+  <h2>A. Gambaran operasi</h2>
+  <div class="q"><b>1. Berapa banyak sampah yang masuk ke sini setiap hari, dan dari mana saja sumbernya?</b>
+    <div class="why"><b>Untuk kita:</b> menentukan apakah ukuran kompartemen dan frekuensi pengosongan yang kami rancang masuk akal.</div></div>
+  <div class="q"><b>2. Kira-kira berapa perbandingan sampah organik dan anorganik yang diterima?</b>
+    <div class="why"><b>Untuk kita:</b> kalau timpang, ukuran dua kompartemen kami sebaiknya tidak sama besar.</div></div>
+  <div class="q"><b>3. Berapa orang yang bertugas, dan bagaimana pembagian kerjanya?</b></div>
+  <div class="q"><b>4. Jam operasional dan hari tersibuk kapan?</b></div>
+
+  <h2>B. Cara memilah saat ini</h2>
+  <div class="q"><b>5. Sampah dipilah di sumber (rumah/nasabah) atau baru dipilah setibanya di sini?</b>
+    <div class="why"><b>Untuk kita:</b> alat kami bekerja di titik pembuangan. Kalau pemilahan nyatanya terjadi di fasilitas, posisi alat perlu dipikirkan ulang.</div></div>
+  <div class="q"><b>6. Kategori apa saja yang dipakai? Apakah cukup organik dan anorganik, atau lebih rinci?</b>
+    <div class="why"><b>Untuk kita:</b> ini pertanyaan paling menentukan. Bank sampah umumnya memakai banyak kategori (PET, HDPE, kertas, kardus, logam, kaca, residu). Kalau begitu, dua kompartemen kami mungkin terlalu sederhana.</div></div>
+  <div class="q"><b>7. Jenis sampah apa yang paling sering salah masuk kategori?</b></div>
+  <div class="q"><b>8. Berapa lama waktu yang dihabiskan untuk memilah setiap hari?</b>
+    <div class="why"><b>Untuk kita:</b> jadi angka pembanding untuk menunjukkan manfaat alat, tanpa perlu mengarang klaim.</div></div>
+
+  <h2>C. Menguji asumsi teknis kami</h2>
+  <div class="box warn">
+    <b>Perlu diakui terus terang saat bertanya.</b> Alat kami menentukan jenis sampah dari tingkat
+    kelembaban: lembab dianggap organik, kering dianggap anorganik. Di lapangan aturan ini punya
+    banyak pengecualian, misalnya daun kering (organik tapi kering) dan botol bekas minuman
+    (anorganik tapi basah). Pertanyaan di bawah ini sengaja untuk menguji kelemahan tersebut.
+  </div>
+  <div class="q"><b>9. Menurut pengalaman Bapak/Ibu, apakah basah dan kering bisa dipakai untuk membedakan organik dan anorganik? Apa saja pengecualiannya?</b>
+    <div class="why"><b>Untuk kita:</b> jawaban jujur di sini menentukan apakah sensor kelembaban cukup, atau perlu ditambah sensor lain (induktif untuk logam, kapasitif, atau kamera).</div></div>
+  <div class="q"><b>10. Sampah yang masuk biasanya sebesar dan seberat apa? Ada yang berupa kantong besar sekaligus?</b>
+    <div class="why"><b>Untuk kita:</b> servo SG90 kami hanya kuat untuk benda ringan. Kalau orang membuang sekantong penuh, mekanismenya harus diganti.</div></div>
+  <div class="q"><b>11. Seberapa kotor dan lembab kondisi di sekitar tempat sampah? Ada air lindi, lalat, atau debu?</b>
+    <div class="why"><b>Untuk kita:</b> sensor inframerah dan ultrasonik bisa salah baca kalau permukaannya kotor atau berembun.</div></div>
+  <div class="q"><b>12. Apakah tersedia listrik dan jaringan internet di titik-titik tempat sampah?</b>
+    <div class="why"><b>Untuk kita:</b> menentukan apakah perlu baterai, panel surya, atau jaringan jarak jauh seperti LoRa.</div></div>
+
+  <h2>D. Keterisian dan pengangkutan</h2>
+  <div class="q"><b>13. Bagaimana cara mengetahui tempat sampah sudah penuh saat ini?</b></div>
+  <div class="q"><b>14. Berapa kali pengangkutan dilakukan, dan siapa yang memutuskan waktunya?</b></div>
+  <div class="q"><b>15. Kalau ada pemberitahuan otomatis saat tempat sampah hampir penuh, siapa yang sebaiknya menerimanya, dan lewat apa?</b>
+    <div class="why"><b>Untuk kita:</b> menentukan bentuk notifikasi di dashboard. Jawabannya mungkin WhatsApp, bukan aplikasi khusus.</div></div>
+
+  <h2>E. Pencatatan dan sistem nasabah <span class="muted" style="font-weight:400;font-size:.85rem">(untuk Tahap 3)</span></h2>
+  <div class="q"><b>16. Bagaimana cara mencatat setoran nasabah sekarang: buku, spreadsheet, atau aplikasi?</b></div>
+  <div class="q"><b>17. Proses menimbang seperti apa? Satuan dan ketelitian timbangannya berapa?</b>
+    <div class="why"><b>Untuk kita:</b> menentukan spesifikasi load cell di Tahap 3, termasuk kapasitas maksimum.</div></div>
+  <div class="q"><b>18. Bagaimana nasabah diidentifikasi? Apakah mereka bersedia memakai kartu?</b>
+    <div class="why"><b>Untuk kita:</b> rencana kami memakai RFID. Kalau kartu sering hilang atau tertinggal, nomor HP mungkin lebih praktis.</div></div>
+  <div class="q"><b>19. Bagaimana sistem poin atau tabungannya, dan bagaimana nasabah mencairkannya?</b></div>
+  <div class="q"><b>20. Apa bagian yang paling merepotkan dari pencatatan manual?</b>
+    <div class="why"><b>Untuk kita:</b> inilah masalah nyata yang layak diselesaikan, lebih baik daripada menebak sendiri.</div></div>
+
+  <h2>F. Nilai ekonomi</h2>
+  <div class="q"><b>21. Jenis material apa yang paling bernilai, dan berapa kisaran harganya per kilogram?</b></div>
+  <div class="q"><b>22. Apakah sampah yang sudah terpilah rapi dihargai lebih tinggi oleh pengepul?</b>
+    <div class="why"><b>Untuk kita:</b> kalau ya, ini alasan kuat kenapa pemilahan otomatis bernilai, dengan angka dari sumber yang bisa dikutip.</div></div>
+  <div class="q"><b>23. Dari mana pemasukan utama tempat ini, dan berapa besar biaya operasionalnya?</b></div>
+
+  <h2>G. Pengalaman dengan teknologi <span class="muted" style="font-weight:400;font-size:.85rem">(biasanya jawaban paling berharga)</span></h2>
+  <div class="q"><b>24. Pernahkah ada alat atau aplikasi yang dicoba di sini lalu berhenti dipakai? Apa penyebabnya?</b>
+    <div class="why"><b>Untuk kita:</b> pertanyaan terpenting di daftar ini. Kegagalan orang lain mencegah kita mengulang kesalahan yang sama.</div></div>
+  <div class="q"><b>25. Siapa yang akan merawat alat kalau rusak, dan seberapa cepat biasanya bisa ditangani?</b></div>
+  <div class="q"><b>26. Apakah ada risiko alat dirusak atau hilang kalau ditaruh di tempat umum?</b></div>
+  <div class="q"><b>27. Seberapa nyaman petugas menggunakan aplikasi di ponsel?</b>
+    <div class="why"><b>Untuk kita:</b> menentukan seberapa sederhana dashboard harus dibuat.</div></div>
+
+  <h2>H. Penutup</h2>
+  <div class="q"><b>28. Kalau alat seperti ini benar-benar ada, di titik mana sebaiknya dipasang lebih dulu?</b></div>
+  <div class="q"><b>29. Informasi apa yang paling ingin Bapak/Ibu lihat di layar pemantauan?</b>
+    <div class="why"><b>Untuk kita:</b> jadi dasar untuk membenahi dashboard, bukan menebak sendiri apa yang berguna.</div></div>
+  <div class="q"><b>30. Apakah kami boleh berkonsultasi lagi, atau mencoba prototipe di sini saat sudah jadi?</b></div>
+
+  <div class="box">
+    <b>Pengingat sebelum berangkat</b>
+    <div class="grid" style="margin-top:.5rem">
+      <span>☐ Minta izin sebelum memotret atau merekam</span>
+      <span>☐ Bawa ringkasan proyek (Bagian 1) untuk ditinggalkan</span>
+      <span>☐ Tanya boleh tidaknya angka disebut di laporan</span>
+      <span>☐ Catat nama dan jabatan narasumber dengan benar</span>
+      <span>☐ Pakai alas kaki tertutup dan pakaian yang sesuai</span>
+      <span>☐ Minta kontak untuk tindak lanjut</span>
+      <span>☐ Bagi tugas: penanya, pencatat, pemotret</span>
+      <span>☐ Ucapkan terima kasih, kirim rangkuman setelahnya</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BAGIAN 3: LEMBAR CATATAN ============ -->
+<div class="sheet pagebreak">
+  <span class="tag">Bagian 3 · Diisi di lokasi</span>
+  <h1>Lembar catatan</h1>
+
+  <table>
+    <tr><th style="width:30%">Tempat / lembaga</th><td></td></tr>
+    <tr><th>Alamat</th><td></td></tr>
+    <tr><th>Tanggal &amp; jam</th><td></td></tr>
+    <tr><th>Narasumber (nama, jabatan)</th><td></td></tr>
+    <tr><th>Kontak (HP / email)</th><td></td></tr>
+    <tr><th>Pencatat</th><td></td></tr>
+  </table>
+
+  <h2>Angka penting</h2>
+  <table>
+    <tr><th style="width:52%">Hal</th><th>Jawaban</th></tr>
+    <tr><td>Volume sampah per hari</td><td></td></tr>
+    <tr><td>Perbandingan organik : anorganik</td><td></td></tr>
+    <tr><td>Jumlah nasabah / pelanggan</td><td></td></tr>
+    <tr><td>Kategori pemilahan yang dipakai</td><td></td></tr>
+    <tr><td>Frekuensi pengangkutan</td><td></td></tr>
+    <tr><td>Kapasitas timbangan &amp; ketelitian</td><td></td></tr>
+    <tr><td>Harga material tertinggi (per kg)</td><td></td></tr>
+    <tr><td>Listrik / internet di lokasi tong</td><td></td></tr>
+  </table>
+
+  <h2>Jawaban atas asumsi kami</h2>
+  <p class="muted" style="font-size:.86rem;margin-bottom:.4rem">Pertanyaan nomor 9 sampai 12.</p>
+  <h3>Apakah basah/kering bisa membedakan organik dan anorganik? Pengecualiannya apa saja?</h3>
+  <span class="fill xtall"></span>
+  <h3>Ukuran dan berat sampah yang biasa dibuang</h3>
+  <span class="fill tall"></span>
+  <h3>Kondisi lingkungan (kotoran, lindi, debu, cuaca)</h3>
+  <span class="fill tall"></span>
+
+  <h2>Cerita kegagalan teknologi sebelumnya</h2>
+  <p class="muted" style="font-size:.86rem;margin-bottom:.4rem">Pertanyaan nomor 24 sampai 26. Catat selengkap mungkin, ini bagian paling berguna.</p>
+  <span class="fill xtall"></span>
+  <span class="fill tall"></span>
+
+  <h2>Kutipan langsung</h2>
+  <p class="muted" style="font-size:.86rem;margin-bottom:.4rem">Tulis persis kalimatnya, beserta nama penuturnya. Berguna untuk laporan, dan jangan diubah-ubah.</p>
+  <span class="fill tall"></span>
+  <span class="fill tall"></span>
+
+  <h2>Catatan bebas</h2>
+  <span class="fill xtall"></span>
+  <span class="fill xtall"></span>
+  <span class="fill tall"></span>
+
+  <h2>Tindak lanjut</h2>
+  <div class="grid">
+    <span>☐ Ada yang perlu diubah dari desain alat</span>
+    <span>☐ Ada angka yang boleh dikutip di laporan</span>
+    <span>☐ Diizinkan berkonsultasi lagi</span>
+    <span>☐ Diizinkan uji coba prototipe di sini</span>
+  </div>
+  <h3>Hal yang harus kami ubah setelah kunjungan ini</h3>
+  <span class="fill tall"></span>
+  <span class="fill tall"></span>
+
+  <div class="foot">
+    <span>Smart Bin · D3 Teknik Informatika</span>
+    <span>Halaman ____ dari ____</span>
+  </div>
+</div>
+
+</body>
+</html>
